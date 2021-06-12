@@ -1,0 +1,25 @@
+{
+  "name": "mere",
+  "author": "jQuery Faisal",
+  "version": "1.0.0",
+  "description": "Multi-user XR Collaboration",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "server": "nodemon app.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "license": "ISC",
+  "dependencies": {
+    "buffered-interpolation": "^0.2.5",
+    "express": "^4.17.1",
+    "randomcolor": "^0.5.4",
+    "socket.io": "^2.3.0",
+    "open-easyrtc": "^2.0.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
