@@ -1,25 +1,22 @@
 // required modules
-var http    = require("http");              // http server core module
-var express = require("express");           // web framework external module
-var serveStatic = require('serve-static');  // serve static files
-var socketIo = require("socket.io");        // web socket external module
-var easyrtc = require("open-easyrtc");               // EasyRTC external module
+const http = require("http");          
+const express = require("express"); 
+const serveStatic = require("serve-static");
+const socketIo = require("socket.io");       
+const easyrtc = require("open-easyrtc");     
+const port = process.env.PORT || 8080;
 
-// Set process name
 process.title = "node-easyrtc";
 
-// Get port or default to 8080
-var port = process.env.PORT || 8080;
 
-// Setup and configure Express http server. Expect a subfolder called "static" to be the web root.
 var app = express();
 app.use(express.static('client'));
 
 // Start Express http server
-var webServer = http.createServer(app);
+var server = http.createServer(app);
 
 // Start Socket.io so it attaches itself to Express server
-var socketServer = socketIo.listen(webServer, {"log level":1});
+var socketServer = socketIo.listen(server, {"log level": 1});
 
 var myIceServers = [
   {"url":"stun:stun.l.google.com:19302"},
@@ -75,6 +72,6 @@ var rtc = easyrtc.listen(app, socketServer, null, function(err, rtcRef) {
 });
 
 //listen on port
-webServer.listen(port, function () {
-    console.log('listening on http://localhost:' + port);
+server.listen(port, () => {
+    console.log('listening everything on ' + port);
 });

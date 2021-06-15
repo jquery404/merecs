@@ -1,4 +1,5 @@
-AFRAME.registerComponent('dynamic-room', {
+
+  AFRAME.registerComponent('dynamic-room', {
     init: function () {
       var el = this.el;
       var params = this.getUrlParams();
@@ -14,7 +15,7 @@ AFRAME.registerComponent('dynamic-room', {
       // Set local user's name
       var player = document.getElementById('player');
       var myNametag = player.querySelector('.nametag');
-      myNametag.setAttribute('text', 'value', params.username);
+      //myNametag.setAttribute('text', 'value', params.username);
       
       // Setup networked-scene
       var networkedComp = {
@@ -41,35 +42,35 @@ AFRAME.registerComponent('dynamic-room', {
       }
       return urlParams;
     }
-});
+  });
 
-AFRAME.registerComponent('spawn-in-circle', {
-    schema: {
-      radius: {type: 'number', default: 1}
-    },
-  
-    init: function() {
-      var el = this.el;
-      var center = el.getAttribute('position');
-  
-      var angleRad = this.getRandomAngleInRadians();
-      var circlePoint = this.randomPointOnCircle(this.data.radius, angleRad);
-      var worldPoint = {x: circlePoint.x + center.x, y: center.y, z: circlePoint.y + center.z};
-      el.setAttribute('position', worldPoint);
-  
-      var angleDeg = angleRad * 180 / Math.PI;
-      var angleToCenter = -1 * angleDeg + 90;
-      var rotationStr = '0 ' + angleToCenter + ' 0';
-      el.setAttribute('rotation', rotationStr);
-    },
-  
-    getRandomAngleInRadians: function() {
-      return Math.random()*Math.PI*2;
-    },
-  
-    randomPointOnCircle: function (radius, angleRad) {
-      var x = Math.cos(angleRad)*radius;
-      var y = Math.sin(angleRad)*radius;
-      return {x: x, y: y};
-    }
-});
+  AFRAME.registerComponent('spawn-in-circle', {
+      schema: {
+        radius: {type: 'number', default: 1}
+      },
+    
+      init: function() {
+        var el = this.el;
+        var center = el.getAttribute('position');
+    
+        var angleRad = this.getRandomAngleInRadians();
+        var circlePoint = this.randomPointOnCircle(this.data.radius, angleRad);
+        var worldPoint = {x: circlePoint.x + center.x, y: center.y, z: circlePoint.y + center.z};
+        el.setAttribute('position', worldPoint);
+    
+        var angleDeg = angleRad * 180 / Math.PI;
+        var angleToCenter = -1 * angleDeg + 90;
+        var rotationStr = '0 ' + angleToCenter + ' 0';
+        el.setAttribute('rotation', rotationStr);
+      },
+    
+      getRandomAngleInRadians: function() {
+        return Math.random()*Math.PI*2;
+      },
+    
+      randomPointOnCircle: function (radius, angleRad) {
+        var x = Math.cos(angleRad)*radius;
+        var y = Math.sin(angleRad)*radius;
+        return {x: x, y: y};
+      }
+  });
