@@ -18,7 +18,7 @@
 </head>
 
 <body>
-
+  <!-- https://supermedium.com/superframe/components/gltf-part/ -->
   <a-scene dynamic-room>
     <a-assets>
 
@@ -26,12 +26,12 @@
       <img id="sky" src="https://img.gs/bbdkhfbzkk/2048x2048,stretch/http://i.imgur.com/WqlqEkq.jpg" crossorigin="anonymous" />
 
       <!-- Templates -->
-      <a-asset-item id="boy-glb" src="/assets/model/curious_boy.glb"></a-asset-item>
+      <a-asset-item id="boy-glb" src="/assets/model/curious_boy_1.glb"></a-asset-item>
 
       <!-- Avatar -->
       <script id="avatar-template" type="text/html">
         <a-entity class="nametag" text="value: Hello World; align:center;" position="0 0.7 0" rotation="0 180 0" scale="8 8 8"></a-entity>
-        <a-entity class="avatar" gltf-model="#boy-glb" scale=".01 .01 .01"></a-entity>
+        <a-entity class="avatar" gltf-model="#boy-glb" scale="1 1 1"></a-entity>
         
       </script>
 
