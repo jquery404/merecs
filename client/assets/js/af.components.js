@@ -21,7 +21,8 @@
       var networkedComp = {
         room: params.room,
         adapter: adapter,
-        audio: voice
+        audio: voice,
+        video: true,
       };
       console.info('Init networked-aframe with settings:', networkedComp);
       el.setAttribute('networked-scene', networkedComp);
@@ -74,3 +75,38 @@
         return {x: x, y: y};
       }
   });
+
+  // manage skybox src
+  AFRAME.registerComponent('set-sky', {
+    schema: {default:''},
+    init: function() {
+      this.timeout = setInterval(this.updateSky.bind(this), 100);
+      this.sky = this.el;
+    },
+    remove: function() {
+      clearInterval(this.timeout);
+      this.el.removeObject3D(this.object3D);
+    },
+    updateSky: function() {
+      if(this.data == 'null') 
+        this.sky.removeAttribute('src');
+      else
+        this.sky.setAttribute('src', this.data);
+    }
+  });
+
+  // grid components
+  AFRAME.registerComponent('grid', {
+    init: function(){
+      this.grid = this.el;
+      this.grid.setAttribute('geometry', 'primitive: plane; width: 10000; height: 10000;');
+      this.grid.setAttribute('material', 'src: '+this.data.src+'; repeat: 10000 10000; transparent: true; metalness:0.6; roughness: 0.1; sphericalEnvMap: '+this.data.envMap+';');
+      this.grid.setAttribute('position', '0 0 0');
+      this.grid.setAttribute('rotation', '-90 0 0');
+    },
+    remove: function(){
+      this.el.removeObject3D(this.object3D);
+    },
+  
+  
+  })

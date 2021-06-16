@@ -1,1 +1,1 @@
-# merecs
+# merecs (Multi-usER ExtEndEd REality CollaboRation SystEM)
