@@ -109,4 +109,64 @@
     },
   
   
-  })
+  });
+
+  // painting on vr
+  AFRAME.registerComponent('painter', {
+
+    schema: {
+        color: {
+          default: 'red',
+          type: 'color'
+        }
+    },
+  
+    init: function () {
+      
+      let first = true;
+      this.painter = new TubePainter();
+      this.painter.setSize( 0.4 );
+      this.painter.mesh.material.side = THREE.DoubleSide;
+      this.painter.setColor(new THREE.Color(this.data.color));
+      
+      this.cursor = new THREE.Vector3();
+      this.userData = {};
+      this.hand = this.el;
+  
+      this.hand.sceneEl.object3D.add(this.painter.mesh);
+
+      this.el.addEventListener('triggerdown', () => {
+        if (first) {
+          first = false;   
+          return;
+        }
+        this.userData.isSelecting = true;
+        // set start
+        this.cursor.setFromMatrixPosition(this.hand.object3D.matrixWorld);
+        this.painter.moveTo(this.cursor);
+      });
+
+      this.el.addEventListener('triggerup', () => {
+        this.userData.isSelecting = false;
+      });
+
+
+      this.userData.isSelecting = false;
+    },
+  
+    update() {
+      this.painter.setColor(new THREE.Color(this.data.color));
+    },
+  
+    tick: function () {
+      var userData = this.userData;
+      var painter = this.painter;
+  
+      if (userData.isSelecting === true) {
+        this.cursor.setFromMatrixPosition(this.hand.object3D.matrixWorld);
+        painter.lineTo(this.cursor);
+        painter.update();
+      }
+    }
+  
+  });

@@ -14,6 +14,7 @@
     <!-- <script src="https://unpkg.com/networked-aframe@^0.4.0/dist/networked-aframe.min.js"></script> -->
     <script src="https://unpkg.com/networked-aframe/dist/networked-aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-randomizer-components@^3.0.1/dist/aframe-randomizer-components.min.js"></script>
+    <script src="assets/js/TubePainter.js"></script>
     <script src="assets/js/af.components.js"></script>
 
 </head>
@@ -29,13 +30,23 @@
       <!-- Templates -->
         <a-asset-item id="boy-glb" src="/assets/model/curious_boy_4.glb"></a-asset-item>
 
-        <!-- Templates -->
+        <!-- Player -->
+        <template id="player-template">
+          <a-entity></a-entity>
+        </template>
 
         <!-- Avatar -->
         <template id="avatar-template">
           <a-entity class="avatar">
             <a-entity class="nametag" text="value: Hello; align:center;" position="0 0.6 0" rotation="0 180 0" scale="4 4 4"></a-entity>
             <a-entity class="cartoon" gltf-model="#boy-glb" scale="1 1 1"></a-entity>
+          </a-entity>
+        </template>
+
+        <!-- Hand -->
+        <template id="hand-template">
+          <a-entity>
+            <a-box scale="0.1 0.1 0.1"></a-box>
           </a-entity>
         </template>
         
@@ -46,14 +57,20 @@
     </a-assets>
 
     <a-entity id="player"
-        networked="template:#avatar-template;attachTemplateToLocal:false;"
-        camera
-        position="0 1.6 0"
-        spawn-in-circle="radius:3"
-        wasd-controls look-controls
-        >
+      networked="template:#player-template;attachTemplateToLocal:false;"
+      spawn-in-circle="radius:3"
+      wasd-controls>
+      <a-entity 
+        camera 
+        position="0 1.6 0" 
+        look-controls 
+        networked="template:#avatar-template;attachTemplateToLocal:false;">
         <a-box class="head" visible="false" random-color></a-box>
       </a-entity>
+
+      <a-entity hand-controls="hand:left" painter networked="template:#hand-template;"></a-entity>
+      <a-entity hand-controls="hand:right" networked="template:#hand-template;"></a-entity>
+    </a-entity>
 
     
     <a-entity
