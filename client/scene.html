@@ -49,6 +49,13 @@
             <a-box scale="0.1 0.1 0.1"></a-box>
           </a-entity>
         </template>
+
+        <!-- Bullet -->
+        <template id="bullet-template">
+          <a-entity>
+            <a-sphere class="bullet" scale="0.1 0.1 0.1" color="#fff"></a-sphere>
+          </a-entity>
+        </template>
         
           <!-- <a-entity class="nametag" text="value: Hello; align:center;" position="0 0.4 0" rotation="0 180 0" scale="4 4 4"></a-entity>
           <a-entity class="avatar" gltf-model="#boy-glb" scale="1 1 1"></a-entity> -->
@@ -58,9 +65,11 @@
 
     <a-entity id="player"
       networked="template:#player-template;attachTemplateToLocal:false;"
+      gun="bulletTemplate:#bullet-template"
       spawn-in-circle="radius:3"
       wasd-controls>
       <a-entity 
+        id="playerHead"
         camera 
         position="0 1.6 0" 
         look-controls 
@@ -77,6 +86,11 @@
       position="5 0 5"
       geometry="primitive: box; width: 1; height: 1;" 
       material="color: gray">
+    </a-entity>
+    <a-entity
+      position="5 1.5 5"
+      geometry="primitive: sphere; width: 1; height: 1;" 
+      material="color: white">
     </a-entity>
 
 

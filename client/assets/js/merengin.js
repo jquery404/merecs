@@ -1,8 +1,6 @@
 
 
-NAF.schemas.add({
-  template: '#avatar-template',
-  components: [
+NAF.schemas.add({template: '#avatar-template', components: [
     'position',
     'rotation',
     // {

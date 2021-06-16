@@ -124,22 +124,17 @@
     init: function () {
       
       let first = true;
-      this.painter = new TubePainter();
-      this.painter.setSize( 0.4 );
-      this.painter.mesh.material.side = THREE.DoubleSide;
-      this.painter.setColor(new THREE.Color(this.data.color));
-      
-      this.cursor = new THREE.Vector3();
       this.userData = {};
-      this.hand = this.el;
-  
-      this.hand.sceneEl.object3D.add(this.painter.mesh);
+
+      this.initPaint();
 
       this.el.addEventListener('triggerdown', () => {
         if (first) {
           first = false;   
           return;
         }
+        
+        this.initPaint();
         this.userData.isSelecting = true;
         // set start
         this.cursor.setFromMatrixPosition(this.hand.object3D.matrixWorld);
@@ -148,10 +143,22 @@
 
       this.el.addEventListener('triggerup', () => {
         this.userData.isSelecting = false;
+        this.painter.removeInTime(this.hand.sceneEl.object3D, 5);
       });
 
 
       this.userData.isSelecting = false;
+    },
+
+    initPaint() {
+      this.painter = new TubePainter();
+      this.painter.setSize( 0.4 );
+      this.painter.mesh.material.side = THREE.DoubleSide;
+      this.painter.setColor(new THREE.Color(this.data.color));
+      
+      this.cursor = new THREE.Vector3();
+      this.hand = this.el;
+      this.hand.sceneEl.object3D.add(this.painter.mesh);
     },
   
     update() {
@@ -169,4 +176,101 @@
       }
     }
   
+  });
+
+  // vr gun
+  AFRAME.registerComponent('gun', {
+    schema: {
+      bulletTemplate: {default: '#bullet-template'},
+      triggerKeyCode: {default: 32} // spacebar
+    },
+  
+    init: function() {
+      var that = this;
+      document.body.onkeyup = function(e){
+        console.log(e.keyCode)
+        if(e.keyCode == that.data.triggerKeyCode){
+          that.shoot();
+        }
+      }
+    },
+  
+    shoot: function() {
+      this.createBullet();
+    },
+  
+    createBullet: function() {
+      var el = document.createElement('a-entity');
+      el.setAttribute('networked', 'template:' + this.data.bulletTemplate);
+      el.setAttribute('remove-in-seconds', 3);
+      el.setAttribute('forward', 'speed:0.3');
+  
+      var tip = document.querySelector('#playerHead');
+      el.setAttribute('position', this.getInitialBulletPosition(tip));
+      el.setAttribute('rotation', this.getInitialBulletRotation(tip));
+  
+      this.el.sceneEl.appendChild(el);
+    },
+  
+    getInitialBulletPosition: function(spawnerEl) {
+      var worldPos = new THREE.Vector3();
+      worldPos.setFromMatrixPosition(spawnerEl.object3D.matrixWorld);
+      return worldPos;
+    },
+  
+    getInitialBulletRotation: function(spawnerEl) {
+      var worldDirection = new THREE.Vector3();
+  
+      spawnerEl.object3D.getWorldDirection(worldDirection);
+      worldDirection.multiplyScalar(-1);
+      this.vec3RadToDeg(worldDirection);
+  
+      return worldDirection;
+    },
+  
+    vec3RadToDeg: function(rad) {
+      rad.set(rad.y * 90, -90 + (-THREE.Math.radToDeg(Math.atan2(rad.z, rad.x))), 0);
+    }
+  });
+
+  AFRAME.registerComponent('forward', {
+    schema: {
+      speed: {default: 0.1},
+    },
+  
+    init: function() {
+      var worldDirection = new THREE.Vector3();
+  
+      this.el.object3D.getWorldDirection(worldDirection);
+      worldDirection.multiplyScalar(-1);
+  
+      this.worldDirection = worldDirection;
+      console.error(this.worldDirection);
+    },
+  
+    tick: function() {
+      var el = this.el;
+  
+      var currentPosition = el.getAttribute('position');
+      var newPosition = this.worldDirection
+        .clone()
+        .multiplyScalar(this.data.speed)
+        .add(currentPosition);
+      el.setAttribute('position', newPosition);
+    }
+  });
+
+  AFRAME.registerComponent('remove-in-seconds', {
+    schema: {
+      default: 1
+    },
+  
+    init: function() {
+      setTimeout(this.destroy.bind(this), this.data * 1000);
+    },
+  
+    destroy: function() {
+      var el = this.el;
+      el.parentNode.removeChild(el);
+    }
   });
