@@ -65,7 +65,6 @@
 
     <a-entity id="player"
       networked="template:#player-template;attachTemplateToLocal:false;"
-      gun="bulletTemplate:#bullet-template"
       spawn-in-circle="radius:3"
       wasd-controls>
       <a-entity 
@@ -77,8 +76,8 @@
         <a-box class="head" visible="false" random-color></a-box>
       </a-entity>
 
-      <a-entity hand-controls="hand:left" painter networked="template:#hand-template;"></a-entity>
-      <a-entity hand-controls="hand:right" networked="template:#hand-template;"></a-entity>
+      <a-entity hand-controls="hand:left" gun="bulletTemplate:#bullet-template" networked="template:#hand-template;"></a-entity>
+      <a-entity hand-controls="hand:right" painter networked="template:#hand-template;"></a-entity>
     </a-entity>
 
     

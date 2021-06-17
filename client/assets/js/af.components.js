@@ -76,7 +76,7 @@
       }
   });
 
-  // manage skybox src
+  // Managing skybox src attribute like a boss
   AFRAME.registerComponent('set-sky', {
     schema: {default:''},
     init: function() {
@@ -95,7 +95,7 @@
     }
   });
 
-  // grid components
+  // Grid components
   AFRAME.registerComponent('grid', {
     init: function(){
       this.grid = this.el;
@@ -111,7 +111,21 @@
   
   });
 
-  // painting on vr
+  // Angle the body slightly downward so the avatar neck is not stiff
+  AFRAME.registerComponent('body', {
+    init: function () {
+      this.head = this.el.parentNode;
+    },
+
+    tick: function (time, delta) {
+      if (!this.head) return;
+      var rot = this.head.getAttribute('rotation');
+      this.el.setAttribute('rotation', {x: -rot.x * 0.3, y: 0, z: -rot.z * 0.3});
+    }
+  });
+
+
+  // Painting on the surface using the controller 
   AFRAME.registerComponent('painter', {
 
     schema: {
@@ -178,7 +192,7 @@
   
   });
 
-  // vr gun
+  // Just for some unneccessary fun e.g. phew phew phew... 
   AFRAME.registerComponent('gun', {
     schema: {
       bulletTemplate: {default: '#bullet-template'},
@@ -187,12 +201,14 @@
   
     init: function() {
       var that = this;
-      document.body.onkeyup = function(e){
-        console.log(e.keyCode)
-        if(e.keyCode == that.data.triggerKeyCode){
-          that.shoot();
-        }
-      }
+      this.el.addEventListener('triggerdown', () => {
+        that.shoot();
+      });
+
+      this.el.addEventListener('triggerup', () => {
+        
+      });
+      
     },
   
     shoot: function() {
@@ -205,7 +221,7 @@
       el.setAttribute('remove-in-seconds', 3);
       el.setAttribute('forward', 'speed:0.3');
   
-      var tip = document.querySelector('#playerHead');
+      var tip = this.el;
       el.setAttribute('position', this.getInitialBulletPosition(tip));
       el.setAttribute('rotation', this.getInitialBulletRotation(tip));
   
@@ -233,6 +249,7 @@
     }
   });
 
+  // It physics, bullet always moves forward duh! 
   AFRAME.registerComponent('forward', {
     schema: {
       speed: {default: 0.1},
@@ -260,6 +277,7 @@
     }
   });
 
+  // Remove something after some seconds 
   AFRAME.registerComponent('remove-in-seconds', {
     schema: {
       default: 1
