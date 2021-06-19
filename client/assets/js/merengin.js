@@ -2,7 +2,7 @@
 function onConnect () {
   console.log("onConnect", new Date());
 
-  // startVideo();
+  startVideo();
 }
 
 function startVideo() {
@@ -10,8 +10,8 @@ function startVideo() {
       navigator.getUserMedia({video: true, audio: true},
 
       function (stream) {
-          // var video = document.querySelector("#myVideo");
-          // video.srcObject = stream;
+          var video = document.querySelector("#myVideo");
+          video.srcObject = stream;
           //localStream = stream;
       },
 

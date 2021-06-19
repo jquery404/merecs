@@ -8,10 +8,8 @@
 
 
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <!-- <script src="https://aframe.io/releases/0.7.0/aframe.min.js"></script> -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.5/socket.io.min.js"></script>
     <script src="easyrtc/easyrtc.js"></script>
-    <!-- <script src="https://unpkg.com/networked-aframe@^0.4.0/dist/networked-aframe.min.js"></script> -->
     <script src="https://unpkg.com/networked-aframe/dist/networked-aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-randomizer-components@^3.0.1/dist/aframe-randomizer-components.min.js"></script>
     <script src="assets/js/TubePainter.js"></script>
@@ -20,7 +18,7 @@
 </head>
 
 <body>
-  <!-- <video id="myVideo" style="position: absolute;" playsInline autoplay="true" muted></video> -->
+  <video id="myVideo" style="position: absolute;" playsInline autoplay="true" muted></video>
   <a-scene dynamic-room>
     <a-assets>
       
@@ -61,7 +59,7 @@
         <!-- Video -->
         <template id="video-template">
           <a-entity class="video">
-            <a-videosphere position="5 1.5 5" radius=".7" networked-video-src></a-videosphere>
+            <a-videosphere position="5 1.5 5" radius=".7" src="#myVideo"></a-videosphere>
           </a-entity>
         </template>
 
@@ -72,12 +70,11 @@
       networked="template:#player-template;attachTemplateToLocal:false;"
       spawn-in-circle="radius:3"
       wasd-controls>
-      <a-entity 
-        id="playerHead"
+      <a-entity id="playerHead"
+        networked="template:#avatar-template;attachTemplateToLocal:false;"
         camera 
         position="0 1.6 0" 
-        look-controls 
-        networked="template:#avatar-template;attachTemplateToLocal:false;">
+        look-controls>
         <a-box class="head" visible="false"></a-box>
         <a-entity class="nametag" visible="false"></a-entity>
       </a-entity>
