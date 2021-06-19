@@ -20,15 +20,16 @@
 </head>
 
 <body>
-  
+  <!-- <video id="myVideo" style="position: absolute;" playsInline autoplay="true" muted></video> -->
   <a-scene dynamic-room>
     <a-assets>
-
+      
       <img id="grid" src="assets/gfx/grid.png" />
       <img id="sky" src="assets/gfx/sky.jpg" />
 
       <!-- Templates -->
         <a-asset-item id="boy-glb" src="/assets/model/curious_boy_4.glb"></a-asset-item>
+        <a-asset-item id="env_arrow" src="/assets/model/env_arrow.obj"></a-asset-item>
 
         <!-- Player -->
         <template id="player-template">
@@ -56,9 +57,13 @@
             <a-sphere class="bullet" scale="0.1 0.1 0.1" color="#fff"></a-sphere>
           </a-entity>
         </template>
-        
-          <!-- <a-entity class="nametag" text="value: Hello; align:center;" position="0 0.4 0" rotation="0 180 0" scale="4 4 4"></a-entity>
-          <a-entity class="avatar" gltf-model="#boy-glb" scale="1 1 1"></a-entity> -->
+
+        <!-- Video -->
+        <template id="video-template">
+          <a-entity class="video">
+            <a-videosphere position="5 1.5 5" radius=".7" networked-video-src></a-videosphere>
+          </a-entity>
+        </template>
 
       <!-- /Templates -->
     </a-assets>
@@ -73,11 +78,24 @@
         position="0 1.6 0" 
         look-controls 
         networked="template:#avatar-template;attachTemplateToLocal:false;">
-        <a-box class="head" visible="false" random-color></a-box>
+        <a-box class="head" visible="false"></a-box>
+        <a-entity class="nametag" visible="false"></a-entity>
       </a-entity>
 
-      <a-entity hand-controls="hand:left" gun="bulletTemplate:#bullet-template" networked="template:#hand-template;"></a-entity>
-      <a-entity hand-controls="hand:right" painter networked="template:#hand-template;"></a-entity>
+      <a-entity hand-controls="hand:left" gun="bulletTemplate:#bullet-template" networked="template:#hand-template;">
+        <a-entity select-bar="controllerID: leftController" id="menuActions" scale="0.7 0.7 0.7" position="0 0.05 0.08" rotation="-85 0 0">
+          <optgroup label="Actions" value="actions">
+            <option value="teleport" src="./assets/gfx/icon_teleport.png" selected>Teleport</option>
+            <option value="save" src="./assets/gfx/icon_save.png">Save</option>
+            <option value="saveAs" src="./assets/gfx/icon_saveAs.png">Save As Copy</option>
+            <option value="new" src="./assets/gfx/icon_new.png">New</option>
+            <option value="erase" src="./assets/gfx/icon_erase.png">Erase</option>
+            <option value="inspect" src="./assets/gfx/icon_inspect.png">Inspect</option>
+            <option value="exit" src="./assets/gfx/icon_exit.png">Exit</option>
+          </optgroup>
+        </a-entity>
+      </a-entity>
+      <a-entity hand-controls="hand:right" laser-controls="hand: right" painter networked="template:#hand-template;"></a-entity>
     </a-entity>
 
     
@@ -86,11 +104,14 @@
       geometry="primitive: box; width: 1; height: 1;" 
       material="color: gray">
     </a-entity>
+    <a-entity networked="template:#video-template;attachTemplateToLocal:false;" videosphereexpand></a-entity>
+
     <a-entity
-      position="5 1.5 5"
-      geometry="primitive: sphere; width: 1; height: 1;" 
-      material="color: white">
+      position="2 0 5"
+      geometry="primitive: box; width: 1; height: 1;" 
+      material="color: gray">
     </a-entity>
+    <!-- <a-videosphere position="2 1.5 5" radius=".7" src="#myVideo" videosphereexpand></a-videosphere> -->
 
 
 

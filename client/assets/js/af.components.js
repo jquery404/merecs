@@ -1,3 +1,56 @@
+function findWithAttr(array, attr, value) {  // find a
+  for (var i = 0; i < array.length; i += 1) {
+      if(array[i][attr] === value) {
+          return i;
+      }
+  }
+  return -1;
+}
+
+// for a given array, find the largest value and return the value of the index thereof (0-based index)
+function indexOfMax(arr) {
+  if (arr.length === 0) {
+      return -1;
+  }
+  var max = arr[0];
+  var maxIndex = 0;
+  for (var i = 1; i < arr.length; i++) {
+      if (arr[i] > max) {
+          maxIndex = i;
+          max = arr[i];
+      }
+  }
+  return maxIndex;
+}
+
+// provide a valid Index for an Array if the desiredIndex is greater or less than an array's length by "looping" around
+function loopIndex(desiredIndex, arrayLength) {   // expects a 0 based index
+if (desiredIndex > (arrayLength - 1)) {
+  return desiredIndex - arrayLength;
+}
+if (desiredIndex < 0) {
+  return arrayLength + desiredIndex;
+}
+return desiredIndex;
+}
+// Ghetto testing of loopIndex helper function
+function assert(condition, message) {
+//    console.log(condition.stringify);
+  if (!condition) {
+      message = message || "Assertion failed";
+      if (typeof Error !== "undefined") {
+          throw new Error(message);
+      }
+      throw message; // Fallback
+  }
+}
+var testLoopArray = [0,1,2,3,4,5,6,7,8,9];
+assert(loopIndex(9, testLoopArray.length) == 9);
+assert(loopIndex(10, testLoopArray.length) == 0);
+assert(loopIndex(11, testLoopArray.length) == 1);
+assert(loopIndex(0, testLoopArray.length) == 0);
+assert(loopIndex(-1, testLoopArray.length) == 9);
+assert(loopIndex(-2, testLoopArray.length) == 8);
 
   AFRAME.registerComponent('dynamic-room', {
     init: function () {
@@ -13,9 +66,8 @@
       var voice = params.hasOwnProperty('voice');
       
       // Set local user's name
-      var player = document.getElementById('player');
-      var myNametag = player.querySelector('.nametag');
-      //myNametag.setAttribute('text', 'value', params.username);
+      var myNametag = document.querySelector('.nametag');
+      myNametag.setAttribute('text', 'value', params.username);
       
       // Setup networked-scene
       var networkedComp = {
@@ -24,7 +76,7 @@
         audio: voice,
         video: true,
       };
-      console.info('Init networked-aframe with settings:', networkedComp);
+      console.info('Init settings:', networkedComp);
       el.setAttribute('networked-scene', networkedComp);
     },
   
@@ -80,7 +132,7 @@
   AFRAME.registerComponent('set-sky', {
     schema: {default:''},
     init: function() {
-      this.timeout = setInterval(this.updateSky.bind(this), 100);
+      this.timeout = setTimeout(this.updateSky.bind(this), 100);
       this.sky = this.el;
     },
     remove: function() {
@@ -109,6 +161,24 @@
     },
   
   
+  });
+
+  AFRAME.registerComponent('videosphereexpand', {
+    
+    init: function () {
+      let videosphere = document.querySelector("a-sky");
+      // let homeworldelements = document.querySelectorAll(".homeworld");
+
+      let videosphereloader = () => {    
+        videosphere.setAttribute('src', '#myVideo');
+        console.log("clicked")
+        // homeworldelements.forEach((homeworldelement) => {
+        //   homeworldelement.setAttribute("visible", false)
+        // })
+      }
+
+      this.el.addEventListener('click', videosphereloader);
+    }
   });
 
   // Angle the body slightly downward so the avatar neck is not stiff
@@ -293,7 +363,7 @@
     }
   });
 
-  // It physics, bullet always moves forward duh! 
+  // Its physics, the bullet always moves forward, duh! 
   AFRAME.registerComponent('forward', {
     schema: {
       speed: {default: 0.1},
@@ -334,5 +404,185 @@
     destroy: function() {
       var el = this.el;
       el.parentNode.removeChild(el);
+    }
+  });
+
+  // ...
+  AFRAME.registerComponent('select-bar', {
+	  schema: {
+	    controls: { type: 'boolean', default: true },
+	    controllerID: { type: 'string', default: 'rightController' }
+	  },
+
+	  // for a given optgroup, make the children
+	  makeSelectOptionsRow: function makeSelectOptionsRow(selectedOptgroupEl, parentEl, index, offsetY, idPrefix) {
+
+	    // make the optgroup label
+	    var optgroupLabelEl = document.createElement("a-entity");
+
+	    optgroupLabelEl.id = idPrefix + "optgroupLabel" + index;
+	    optgroupLabelEl.setAttribute("position", "0.07 " + (0.045 + offsetY) + " -0.003");
+	    optgroupLabelEl.setAttribute("scale", "0.5 0.5 0.5");
+	    optgroupLabelEl.setAttribute("text", "value", selectedOptgroupEl.getAttribute('label'));
+	    optgroupLabelEl.setAttribute("text", "color", "#747474");
+	    parentEl.appendChild(optgroupLabelEl);
+
+	    // get the options available for this optgroup row
+	    var optionsElements = selectedOptgroupEl.getElementsByTagName("option"); // the actual JS children elements
+
+	    // convert the NodeList of matching option elements into a Javascript Array
+	    var optionsElementsArray = Array.prototype.slice.call(optionsElements);
+
+	    var firstArray = optionsElementsArray.slice(0, 4); // get items 0 - 4
+	    var previewArray = optionsElementsArray.slice(-3); // get the 3 LAST items of the array
+
+	    // Combine into "menuArray", a list of currently visible options where the middle index is the currently selected object
+	    var menuArray = previewArray.concat(firstArray);
+
+	    var selectOptionsHTML = "";
+	    var startPositionX = -0.225;
+	    var deltaX = 0.075;
+
+	    // For each menu option, create a preview element and its appropriate children
+	    menuArray.forEach(function (element, menuArrayIndex) {
+	      var visible = menuArrayIndex === 0 || menuArrayIndex === 6 ? false : true;
+	      var selected = menuArrayIndex === 3;
+	      // index of the optionsElementsArray where optionsElementsArray.element.getattribute("value") = element.getattribute("value")
+	      var originalOptionsArrayIndex = findWithAttr(optionsElementsArray, "value", element.getAttribute("value"));
+	      selectOptionsHTML += '\n      <a-entity id="' + idPrefix + originalOptionsArrayIndex + '" visible="' + visible + '" class="preview' + (selected ? " selected" : "") + '" optionid="' + originalOptionsArrayIndex + '" value="' + element.getAttribute("value") + '" optgroup="' + selectedOptgroupEl.getAttribute("value") + '" position="' + startPositionX + ' ' + offsetY + ' 0">\n        <a-box class="previewFrame" position="0 0 -0.003" scale="0.06 0.06 0.005" material="color: ' + (selected ? "yellow" : "#222222") + '"></a-box>\n        <a-image class="previewImage" scale="0.05 0.05 0.05" src="' + element.getAttribute("src") + '" ></a-image>\n        <a-entity class="objectName" position="0.065 -0.04 -0.003" scale="0.18 0.18 0.18" text="value: ' + element.text + '; color: ' + (selected ? "yellow" : "#747474") + '"></a-entity>\n      </a-entity>';
+	      startPositionX += deltaX;
+	    });
+
+	    // Append these menu options to a new element with id of "selectOptionsRow"
+	    var selectOptionsRowEl = document.createElement("a-entity");
+	    selectOptionsRowEl.id = idPrefix + "selectOptionsRow" + index;
+	    selectOptionsRowEl.innerHTML = selectOptionsHTML;
+	    parentEl.appendChild(selectOptionsRowEl);
+	  },
+
+	  init: function init() {
+	    // Create select bar menu from html child `option` elements beneath parent entity inspired by the html5 spec: http://www.w3schools.com/tags/tag_optgroup.asp
+	    var selectEl = this.el; // Reference to the component's element.
+	    this.lastTime = new Date();
+	    this.selectedOptgroupValue = null;
+	    this.selectedOptgroupIndex = 0;
+	    this.selectedOptionValue = null;
+	    this.selectedOptionIndex = 0;
+
+	    // we want a consistent prefix when creating IDs
+	    // if the parent has an id, use that; otherwise, use the string "menu"
+	    this.idPrefix = selectEl.id ? selectEl.id : "menu";
+
+	    // Create the "frame" of the select menu bar
+	    var selectRenderEl = document.createElement("a-entity");
+	    selectRenderEl.id = this.idPrefix + "selectRender";
+	    selectRenderEl.innerHTML = '\n      <a-box id="' + this.idPrefix + 'Frame" scale="0.4 0.15 0.005" position="0 0 -0.0075"  material="opacity: 0.5; transparent: true; color: #000000"></a-box>\n      <a-entity id="' + this.idPrefix + 'arrowRight" position="0.225 0 0" rotation="90 180 0" scale="-0.004 0.002 0.004" obj-model="obj:#env_arrow" material="opacity: 0.5; transparent: true; color: #000000"></a-entity>\n      <a-entity id="' + this.idPrefix + 'arrowLeft" position="-0.225 0 0" rotation="90 180 0" scale="0.004 0.002 0.004" obj-model="obj:#env_arrow" material="opacity:0.5; transparent:true; color:#000000"></a-entity>\n      <a-entity id="' + this.idPrefix + 'arrowUp" position="0 0.1 0" rotation="0 270 90" scale="0.004 0.002 0.004" obj-model="obj:#env_arrow" material="opacity: 0.5; transparent: true; color: #000000"></a-entity>\n      <a-entity id="' + this.idPrefix + 'arrowDown" position="0 -0.1 0" rotation="0 270 90" scale="-0.004 0.002 0.004" obj-model="obj:#env_arrow" material="opacity: 0.5; transparent: true; color: #000000"></a-entity>\n      ';
+	    selectEl.appendChild(selectRenderEl);
+
+	    var optgroups = selectEl.getElementsByTagName("optgroup"); // Get the optgroups
+	    var selectedOptgroupEl = optgroups[this.selectedOptgroupIndex]; // fetch the currently selected optgroup
+	    this.selectedOptgroupValue = selectedOptgroupEl.getAttribute("value"); // set component property to opgroup value
+
+	    this.makeSelectOptionsRow(selectedOptgroupEl, selectRenderEl, this.selectedOptgroupIndex, 0, this.idPrefix);
+
+	    var options = selectedOptgroupEl.getElementsByTagName("option");
+	    var selectedOptionEl = options[this.selectedOptionIndex];
+	    this.selectedOptionValue = selectedOptionEl.getAttribute("value");
+	  },
+
+  });
+
+  AFRAME.registerComponent('networked-video-src', {
+
+    schema: {
+    },
+  
+    dependencies: ['material'],
+  
+    init: function () {
+      this.videoTexture = null;
+      this.video = null;
+      this.stream = null;
+  
+      this._setMediaStream = this._setMediaStream.bind(this);
+  
+      NAF.utils.getNetworkedEntity(this.el).then((networkedEl) => {
+        const ownerId = networkedEl.components.networked.data.owner;
+  
+        if (ownerId) {
+          NAF.connection.adapter.getMediaStream(ownerId, "video")
+            .then(this._setMediaStream)
+            .catch((e) => console.log(`Error getting media stream for ${ownerId}`, e));
+        } else {
+          // Correctly configured local entity, perhaps do something here for enabling debug audio loopback
+        }
+      });
+    },
+  
+    _setMediaStream(newStream) {
+  
+      if(!this.video) {
+        this.setupVideo();
+      }
+  
+      if(newStream != this.stream) {
+        if (this.stream) {
+          this._clearMediaStream();
+        }
+  
+        if (newStream) {
+          this.video.srcObject = newStream;
+  
+          const playResult = this.video.play();
+          if (playResult instanceof Promise) {
+            playResult.catch((e) => console.log(`Error play video stream`, e));
+          }
+  
+          if (this.videoTexture) {
+            this.videoTexture.dispose();
+          }
+  
+          this.videoTexture = new THREE.VideoTexture(this.video);
+  
+          const mesh = this.el.getObject3D('mesh');
+          mesh.material.map = this.videoTexture;
+          mesh.material.needsUpdate = true;
+        }
+  
+        this.stream = newStream;
+      }
+    },
+  
+    _clearMediaStream() {
+  
+      this.stream = null;
+  
+      if (this.videoTexture) {
+  
+        if (this.videoTexture.image instanceof HTMLVideoElement) {
+          // Note: this.videoTexture.image === this.video
+          const video = this.videoTexture.image;
+          video.pause();
+          video.srcObject = null;
+          video.load();
+        }
+  
+        this.videoTexture.dispose();
+        this.videoTexture = null;
+      }
+    },
+  
+    remove: function() {
+        this._clearMediaStream();
+    },
+  
+    setupVideo: function() {
+      if (!this.video) {
+        const video = document.createElement('video');
+        video.setAttribute('autoplay', true);
+        video.setAttribute('playsinline', true);
+        video.setAttribute('muted', true);
+        this.video = video;
+      }
     }
   });
