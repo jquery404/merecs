@@ -224,11 +224,13 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
         // set start
         this.cursor.setFromMatrixPosition(this.hand.object3D.matrixWorld);
         this.painter.moveTo(this.cursor);
+        NAF.connection.broadcastDataGuaranteed("stroke-started", this.hand.object3D.matrixWorld);
       });
 
       this.el.addEventListener('triggerup', () => {
         this.userData.isSelecting = false;
         this.painter.removeInTime(this.hand.sceneEl.object3D, 5);
+        NAF.connection.broadcastDataGuaranteed("stroke-ended", this.hand.object3D.matrixWorld);
       });
 
 
@@ -493,4 +495,95 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
 
   });
 
-  
+  AFRAME.registerComponent('excuse-me', {
+    init: function() {
+      // keep track of each avatar / networkID / clientID
+      const usersMap = {};
+      this.userData = {};
+      let that = this;
+      this.excuse = this.el;
+
+      document.body.addEventListener("entityCreated", function(evt) {
+        console.log("entityCreated event. clientId =", evt.detail.el);
+        const el = evt.detail.el;
+        const networkedComponent = el.getAttribute("networked");
+        usersMap[networkedComponent.creator] = {
+          networkId: networkedComponent.networkId,
+          el: el
+        };
+      });
+
+      document.body.addEventListener("clientDisconnected", function(evt) {
+        if (usersMap[evt.detail.clientId])
+          delete usersMap[evt.detail.clientId];
+      });
+      
+      // receive and react
+
+      function createIndicator(parent) {
+        var indicator = document.createElement("a-entity");
+        indicator.setAttribute("position", "0 1 0");
+        
+        var sphere = document.createElement("a-sphere");
+        sphere.setAttribute("radius", "0.1");
+        sphere.setAttribute("position", "0 -0.4 0");
+        indicator.appendChild(sphere);
+
+        var box = document.createElement("a-box");
+        box.setAttribute("scale", "0.1 0.7 0.1");
+        box.setAttribute("position", "0 0.1 0");
+        indicator.appendChild(box);
+
+        parent.appendChild(indicator);
+        return indicator;
+      }
+      
+
+      NAF.connection.subscribeToDataChannel("stroke-started", function newData(sender, type, data, target) {
+        if (!usersMap[sender]) {
+          console.log("unknown sender");
+          return;
+        }
+        let clientData = usersMap[sender];
+
+        if (clientData.indicator) {
+          clientData.el.removeChild(clientData.indicator);
+          clientData.indicator = null;
+        } else {
+          clientData.indicator = createIndicator(clientData.el);
+        }
+
+        that.initPaint();
+        that.userData.isSelecting = true;
+        // set start
+        that.cursor.setFromMatrixPosition(data);
+        that.painter.moveTo(that.cursor);
+      });
+
+      NAF.connection.subscribeToDataChannel("stroke-ended", function newData(sender, type, data, target) {
+        if (!usersMap[sender]) {
+          console.log("unknown sender");
+          return;
+        }
+        let clientData = usersMap[sender];
+
+        that.userData.isSelecting = false;
+        that.cursor.setFromMatrixPosition(data);
+        that.painter.lineTo(this.excuse.cursor);
+        that.painter.update();
+      });
+
+      this.userData.isSelecting = false;
+    },
+
+    initPaint() {
+      this.painter = new TubePainter();
+      this.painter.setSize( 0.4 );
+      this.painter.mesh.material.side = THREE.DoubleSide;
+      this.painter.setColor(new THREE.Color(this.data.color));
+      
+      this.cursor = new THREE.Vector3();
+      this.hand = this.el;
+      this.hand.sceneEl.object3D.add(this.painter.mesh);
+    },
+  });
