@@ -18,7 +18,6 @@
 </head>
 
 <body>
-  <video id="myVideo" style="position: absolute;" playsInline autoplay="true" muted></video>
   <a-scene dynamic-room>
     <a-assets>
       
@@ -59,7 +58,7 @@
         <!-- Video -->
         <template id="video-template">
           <a-entity class="video">
-            <a-videosphere position="5 1.5 5" radius=".7" src="#myVideo"></a-videosphere>
+            <a-videosphere position="5 1.5 5" radius=".7" networked-video-source videosphereexpand></a-videosphere>
           </a-entity>
         </template>
 
@@ -101,14 +100,13 @@
       geometry="primitive: box; width: 1; height: 1;" 
       material="color: gray">
     </a-entity>
-    <a-entity networked="template:#video-template;attachTemplateToLocal:false;" videosphereexpand></a-entity>
+    <a-entity networked="template:#video-template;attachTemplateToLocal:false;"></a-entity>
 
     <a-entity
       position="2 0 5"
       geometry="primitive: box; width: 1; height: 1;" 
       material="color: gray">
     </a-entity>
-    <!-- <a-videosphere position="2 1.5 5" radius=".7" src="#myVideo" videosphereexpand></a-videosphere> -->
 
 
 

@@ -2,7 +2,7 @@
 function onConnect () {
   console.log("onConnect", new Date());
 
-  startVideo();
+  //startVideo();
 }
 
 function startVideo() {
