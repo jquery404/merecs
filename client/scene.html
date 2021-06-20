@@ -18,7 +18,7 @@
 </head>
 
 <body>
-  <a-scene dynamic-room>
+  <a-scene merecs-room>
     <a-assets>
       
       <img id="grid" src="assets/gfx/grid.png" />
@@ -58,7 +58,7 @@
         <!-- Video -->
         <template id="video-template">
           <a-entity class="video">
-            <a-videosphere position="5 1.5 5" radius=".7" networked-video-source videosphereexpand></a-videosphere>
+            <a-videosphere position="5 1.5 5" radius=".7" merecs-stream-src videosphereexpand></a-videosphere>
           </a-entity>
         </template>
 
@@ -95,8 +95,10 @@
     </a-entity>
 
     
+    <a-entity class="syncManager" sync-paint></a-entity>
+
+
     <a-entity
-      excuse-me
       position="5 0 5"
       geometry="primitive: box; width: 1; height: 1;" 
       material="color: gray">

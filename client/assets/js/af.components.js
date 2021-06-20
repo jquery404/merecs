@@ -52,7 +52,7 @@ assert(loopIndex(0, testLoopArray.length) == 0);
 assert(loopIndex(-1, testLoopArray.length) == 9);
 assert(loopIndex(-2, testLoopArray.length) == 8);
 
-  AFRAME.registerComponent('dynamic-room', {
+  AFRAME.registerComponent('merecs-room', {
     init: function () {
       var el = this.el;
       var params = this.getUrlParams();
@@ -61,13 +61,14 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
         window.alert('Please add a room name in the URL, eg. ?room=myroom');
       }
   
+      var host = params.hasOwnProperty('host');
       var webrtc = params.hasOwnProperty('webrtc');
       var adapter = webrtc ? 'easyrtc' : 'wseasyrtc';
       var voice = params.hasOwnProperty('voice');
       
       // Set local user's name
       var myNametag = document.querySelector('.nametag');
-      myNametag.setAttribute('text', 'value', params.username);
+      myNametag.setAttribute('text', 'value', (host?'(HOST)': '') + params.username);
       
       // Setup networked-scene
       var networkedComp = {
@@ -182,7 +183,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
     }
   });
 
-  // Angle the body slightly downward so the avatar neck is not stiff
+  // TODO Angle the body slightly downward so the avatar neck is not stiff
   AFRAME.registerComponent('body', {
     init: function () {
       this.head = this.el.parentNode;
@@ -224,13 +225,13 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
         // set start
         this.cursor.setFromMatrixPosition(this.hand.object3D.matrixWorld);
         this.painter.moveTo(this.cursor);
-        NAF.connection.broadcastDataGuaranteed("stroke-started", this.hand.object3D.matrixWorld);
+        NAF.connection.broadcastDataGuaranteed("stroke-start", this.hand.object3D.matrixWorld);
       });
 
       this.el.addEventListener('triggerup', () => {
         this.userData.isSelecting = false;
-        this.painter.removeInTime(this.hand.sceneEl.object3D, 5);
         NAF.connection.broadcastDataGuaranteed("stroke-ended", this.hand.object3D.matrixWorld);
+        this.painter.removeInTime(this.hand.sceneEl.object3D, 5);
       });
 
 
@@ -260,6 +261,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
         this.cursor.setFromMatrixPosition(this.hand.object3D.matrixWorld);
         painter.lineTo(this.cursor);
         painter.update();
+        NAF.connection.broadcastDataGuaranteed("stroke-started", this.hand.object3D.matrixWorld);
       }
     }
   
@@ -495,14 +497,15 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
 
   });
 
-  AFRAME.registerComponent('excuse-me', {
+  // Synchronize drawing for all participants
+  AFRAME.registerComponent('sync-paint', {
     init: function() {
       // keep track of each avatar / networkID / clientID
       const usersMap = {};
       this.userData = {};
       let that = this;
       this.excuse = this.el;
-
+      console.log('userMap', usersMap);
       document.body.addEventListener("entityCreated", function(evt) {
         console.log("entityCreated event. clientId =", evt.detail.el);
         const el = evt.detail.el;
@@ -539,7 +542,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       }
       
 
-      NAF.connection.subscribeToDataChannel("stroke-started", function newData(sender, type, data, target) {
+      NAF.connection.subscribeToDataChannel("stroke-start", function newData(sender, type, data, target) {
         if (!usersMap[sender]) {
           console.log("unknown sender");
           return;
@@ -560,17 +563,32 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
         that.painter.moveTo(that.cursor);
       });
 
+      NAF.connection.subscribeToDataChannel("stroke-started", function newData(sender, type, data, target) {
+        if (!usersMap[sender]) {
+          console.log("unknown sender");
+          return;
+        }
+        // set start
+        var userData = that.userData;
+        var painter = that.painter;
+    
+        if (userData.isSelecting === true) {
+          that.cursor.setFromMatrixPosition(data);
+          painter.lineTo(that.cursor);
+          painter.update();          
+        }
+      });
+
       NAF.connection.subscribeToDataChannel("stroke-ended", function newData(sender, type, data, target) {
         if (!usersMap[sender]) {
           console.log("unknown sender");
           return;
         }
         let clientData = usersMap[sender];
-
+        
         that.userData.isSelecting = false;
-        that.cursor.setFromMatrixPosition(data);
-        that.painter.lineTo(this.excuse.cursor);
         that.painter.update();
+        that.painter.removeInTime(that.el.sceneEl.object3D, 5);
       });
 
       this.userData.isSelecting = false;
@@ -580,10 +598,107 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       this.painter = new TubePainter();
       this.painter.setSize( 0.4 );
       this.painter.mesh.material.side = THREE.DoubleSide;
-      this.painter.setColor(new THREE.Color(this.data.color));
+      this.painter.setColor(new THREE.Color('red'));
       
       this.cursor = new THREE.Vector3();
       this.hand = this.el;
       this.hand.sceneEl.object3D.add(this.painter.mesh);
     },
   });
+
+  // ...
+  AFRAME.registerComponent('merecs-stream-src', {
+
+    schema: {
+    },
+  
+    dependencies: ['material'],
+  
+    init: function () {
+      this.videoTexture = null;
+      this.video = null;
+      this.stream = null;
+  
+      this._setMediaStream = this._setMediaStream.bind(this);
+  
+      NAF.utils.getNetworkedEntity(this.el).then((networkedEl) => {
+        const ownerId = networkedEl.components.networked.data.owner;
+  
+        if (ownerId) {
+          NAF.connection.adapter.getMediaStream(ownerId, "video")
+            .then(this._setMediaStream)
+            .catch((e) => naf.log.error(`Error getting media stream for ${ownerId}`, e));
+        } else {
+          // Correctly configured local entity, perhaps do something here for enabling debug audio loopback
+        }
+      });
+    },
+  
+    _setMediaStream(newStream) {
+  
+      if(!this.video) {
+        this.setupVideo();
+      }
+  
+      if(newStream != this.stream) {
+        if (this.stream) {
+          this._clearMediaStream();
+        }
+  
+        if (newStream) {
+          this.video.srcObject = newStream;
+  
+          const playResult = this.video.play();
+          if (playResult instanceof Promise) {
+            playResult.catch((e) => naf.log.error(`Error play video stream`, e));
+          }
+  
+          if (this.videoTexture) {
+            this.videoTexture.dispose();
+          }
+  
+          this.videoTexture = new THREE.VideoTexture(this.video);
+  
+          const mesh = this.el.getObject3D('mesh');
+          mesh.material.map = this.videoTexture;
+          mesh.material.needsUpdate = true;
+        }
+  
+        this.stream = newStream;
+      }
+    },
+  
+    _clearMediaStream() {
+  
+      this.stream = null;
+  
+      if (this.videoTexture) {
+  
+        if (this.videoTexture.image instanceof HTMLVideoElement) {
+          // Note: this.videoTexture.image === this.video
+          const video = this.videoTexture.image;
+          video.pause();
+          video.srcObject = null;
+          video.load();
+        }
+  
+        this.videoTexture.dispose();
+        this.videoTexture = null;
+      }
+    },
+  
+    remove: function() {
+        this._clearMediaStream();
+    },
+  
+    setupVideo: function() {
+      if (!this.video) {
+        const video = document.createElement('video');
+        video.setAttribute('autoplay', true);
+        video.setAttribute('playsinline', true);
+        video.setAttribute('muted', true);
+        this.video = video;
+      }
+    }
+  });
+
