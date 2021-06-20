@@ -63,7 +63,7 @@
         </template>
 
       <!-- /Templates -->
-    </a-assets>
+    </a-assets> 
 
     <a-entity id="player"
       networked="template:#player-template;attachTemplateToLocal:false;"
@@ -103,7 +103,7 @@
       geometry="primitive: box; width: 1; height: 1;" 
       material="color: gray">
     </a-entity>
-    <a-entity networked="template:#video-template;attachTemplateToLocal:false;"></a-entity>
+    <a-entity networked="template:#video-template;attachTemplateToLocal:false;" spawn-in-circle="radius:3"></a-entity>
 
     <a-entity
       position="2 0 5"

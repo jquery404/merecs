@@ -44,6 +44,7 @@ function assert(condition, message) {
       throw message; // Fallback
   }
 }
+
 var testLoopArray = [0,1,2,3,4,5,6,7,8,9];
 assert(loopIndex(9, testLoopArray.length) == 9);
 assert(loopIndex(10, testLoopArray.length) == 0);
@@ -51,6 +52,11 @@ assert(loopIndex(11, testLoopArray.length) == 1);
 assert(loopIndex(0, testLoopArray.length) == 0);
 assert(loopIndex(-1, testLoopArray.length) == 9);
 assert(loopIndex(-2, testLoopArray.length) == 8);
+
+
+  const usersMap = {};
+  let isHosting;
+  let videoReceiveList = [];
 
   AFRAME.registerComponent('merecs-room', {
     init: function () {
@@ -65,6 +71,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       var webrtc = params.hasOwnProperty('webrtc');
       var adapter = webrtc ? 'easyrtc' : 'wseasyrtc';
       var voice = params.hasOwnProperty('voice');
+      isHosting = host ? true : false;
       
       // Set local user's name
       var myNametag = document.querySelector('.nametag');
@@ -79,6 +86,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       };
       console.info('Init settings:', networkedComp);
       el.setAttribute('networked-scene', networkedComp);
+      
     },
   
     getUrlParams: function () {
@@ -164,15 +172,20 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
   
   });
 
+  // Switching camera src of the skybox 
   AFRAME.registerComponent('videosphereexpand', {
     
     init: function () {
       this.vdo = this.el;
-      let videosphere = document.querySelector("a-sky");
+      let skybox = document.querySelector("a-sky");
+      let videosphere = document.querySelector("a-videosphere");
       // let homeworldelements = document.querySelectorAll(".homeworld");
+      
+      
+      let videosphereloader = () => { 
+        skybox.getObject3D('mesh').material.map = videosphere.getObject3D('mesh').material.map;
+        videosphere.setAttribute('visible', false);
 
-      let videosphereloader = () => {    
-        videosphere.setAttribute('src', this.vdo.getAttribute('src'));
         console.log("clicked")
         // homeworldelements.forEach((homeworldelement) => {
         //   homeworldelement.setAttribute("visible", false)
@@ -501,19 +514,19 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
   AFRAME.registerComponent('sync-paint', {
     init: function() {
       // keep track of each avatar / networkID / clientID
-      const usersMap = {};
+
       this.userData = {};
       let that = this;
-      this.excuse = this.el;
-      console.log('userMap', usersMap);
+
       document.body.addEventListener("entityCreated", function(evt) {
         console.log("entityCreated event. clientId =", evt.detail.el);
         const el = evt.detail.el;
         const networkedComponent = el.getAttribute("networked");
         usersMap[networkedComponent.creator] = {
           networkId: networkedComponent.networkId,
-          el: el
+          el: el,
         };
+        let currentOwnerId = usersMap[''].el.components.networked.data.owner;
       });
 
       document.body.addEventListener("clientDisconnected", function(evt) {
@@ -618,18 +631,22 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       this.videoTexture = null;
       this.video = null;
       this.stream = null;
-  
+      let that = this;
       this._setMediaStream = this._setMediaStream.bind(this);
-  
+      
       NAF.utils.getNetworkedEntity(this.el).then((networkedEl) => {
         const ownerId = networkedEl.components.networked.data.owner;
-  
-        if (ownerId) {
+        const currentOwnerId = usersMap[""].el.components.networked.data.owner;
+        videoReceiveList.push(ownerId);
+        
+
+        if ((ownerId && videoReceiveList.length == 1) || (ownerId && isHosting && videoReceiveList.length==2)) {
+          console.log('video coming from ', ownerId, videoReceiveList.length);
           NAF.connection.adapter.getMediaStream(ownerId, "video")
             .then(this._setMediaStream)
             .catch((e) => naf.log.error(`Error getting media stream for ${ownerId}`, e));
         } else {
-          // Correctly configured local entity, perhaps do something here for enabling debug audio loopback
+          that.el.components.material.material.color = new THREE.Color( 0xff0000 );
         }
       });
     },
@@ -647,7 +664,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
   
         if (newStream) {
           this.video.srcObject = newStream;
-  
+            
           const playResult = this.video.play();
           if (playResult instanceof Promise) {
             playResult.catch((e) => naf.log.error(`Error play video stream`, e));
