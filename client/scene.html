@@ -25,7 +25,8 @@
       <img id="sky" src="assets/gfx/sky.jpg" />
 
       <!-- Templates -->
-        <a-asset-item id="boy-glb" src="/assets/model/curious_boy_4.glb"></a-asset-item>
+        <a-asset-item id="boy-head-glb" src="/assets/model/curious_boy_head_5.glb"></a-asset-item>
+        <a-asset-item id="boy-body-glb" src="/assets/model/curious_boy_body_5.glb"></a-asset-item>
         <a-asset-item id="env_arrow" src="/assets/model/env_arrow.obj"></a-asset-item>
 
         <!-- Player -->
@@ -37,9 +38,15 @@
         <template id="avatar-template">
           <a-entity class="avatar">
             <a-entity class="nametag" text="value: Hello; align:center;" position="0 0.6 0" rotation="0 180 0" scale="4 4 4"></a-entity>
-            <a-entity class="cartoon" gltf-model="#boy-glb" scale="1 1 1"></a-entity>
+            <a-entity class="cartoon" gltf-model="#boy-head-glb" scale="1 1 1"></a-entity>
           </a-entity>
         </template>
+
+        <!-- Avatar -->
+        <template id="body-template">
+          <a-entity class="cartoon-body" gltf-model="#boy-body-glb" scale="1 1 1"></a-entity>
+        </template>
+
 
         <!-- Hand -->
         <template id="hand-template">
@@ -74,12 +81,14 @@
         camera 
         position="0 1.6 0" 
         look-controls>
+        <a-entity body networked="template:#body-template;showLocalTemplate:false;" visible="false"></a-entity>
         <a-box class="head" visible="false"></a-box>
         <a-entity class="nametag" visible="false"></a-entity>
       </a-entity>
 
-      <a-entity hand-controls="hand:left" gun="bulletTemplate:#bullet-template" networked="template:#hand-template;">
-        <a-entity select-bar="controllerID: leftController" id="menuActions" scale="0.7 0.7 0.7" position="0 0.05 0.08" rotation="-85 0 0">
+      <!-- <a-entity id="leftHandController" hand-controls="hand:left" debug-controls="menuID: menuActions" gun="bulletTemplate:#bullet-template" networked="template:#hand-template;"> -->
+      <a-entity id="leftHandController" oculus-touch-controls="hand: left" vive-controls="hand: left" debug-controls="menuID: menuActions" gun="bulletTemplate:#bullet-template" networked="template:#hand-template;">
+        <a-entity  select-bar="controllerID: leftHandController" id="menuActions" scale="0.7 0.7 0.7" position="0 .1 0" rotation="-85 0 0">
           <optgroup label="Actions" value="actions">
             <option value="teleport" src="./assets/gfx/icon_teleport.png" selected>Teleport</option>
             <option value="save" src="./assets/gfx/icon_save.png">Save</option>
@@ -87,11 +96,11 @@
             <option value="new" src="./assets/gfx/icon_new.png">New</option>
             <option value="erase" src="./assets/gfx/icon_erase.png">Erase</option>
             <option value="inspect" src="./assets/gfx/icon_inspect.png">Inspect</option>
-            <option value="exit" src="./assets/gfx/icon_exit.png">Exit</option>
+            <option value="shooter" src="./assets/gfx/gun_shot.png">Shooter</option>
           </optgroup>
         </a-entity>
       </a-entity>
-      <a-entity hand-controls="hand:right" laser-controls="hand: right" painter networked="template:#hand-template;"></a-entity>
+      <a-entity id="rightHandController" hand-controls="hand:right" laser-controls="hand: right" painter networked="template:#hand-template;"></a-entity>
     </a-entity>
 
     
