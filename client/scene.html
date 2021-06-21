@@ -107,22 +107,7 @@
     
     <a-entity class="syncManager" sync-paint></a-entity>
 
-
-    <a-entity
-      position="5 0 5"
-      geometry="primitive: box; width: 1; height: 1;" 
-      material="color: gray">
-    </a-entity>
     <a-entity networked="template:#video-template;attachTemplateToLocal:false;" spawn-in-circle="radius:3"></a-entity>
-
-    <a-entity
-      position="2 0 5"
-      geometry="primitive: box; width: 1; height: 1;" 
-      material="color: gray">
-    </a-entity>
-
-
-
 
     <a-entity grid="src: #grid; env-map: #sky"></a-entity>
     <a-sky set-sky="#sky" rotation="0 -90 0"></a-sky>
