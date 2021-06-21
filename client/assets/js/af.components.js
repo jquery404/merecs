@@ -1442,7 +1442,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
 
   AFRAME.registerComponent('merecs-audio-src', {
     schema: {
-      positional: { default: true },
+      positional: { default: false },
       distanceModel: {
         default: "inverse",
         oneOf: ["linear", "inverse", "exponential"]

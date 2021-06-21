@@ -2,7 +2,7 @@
 [] 360 videos streaming 
 [-] 360 videos switching 
 [] GUI for 360 videos
-[] Audio sync between users
+[-] Audio sync between users
 [-] Name tag update across all the users
 [-] Special name tag for the (HOST)
 [] VR LEGO obj
