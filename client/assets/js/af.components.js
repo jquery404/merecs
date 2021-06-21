@@ -1134,6 +1134,8 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       console.log(optionValue);
       switch(optionValue){
         case 'annotation': break; 
+        case 'pieces': this.el.emit("lego-pieces"); break;
+        case 'goal': this.el.emit("lego-goal"); break;
         case 'shooter': this.el.emit("gun-fire"); break;
         default: break;
       }
@@ -1567,5 +1569,40 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
     }
 
   });
+
+
+  // questionarries
+  AFRAME.registerComponent('toggle-lego-model', {
+    schema: {
+      bulletTemplate: {default: '#bullet-template'},      
+    },
+
+    init: function () {
+      var self = this;
+      this.el.addEventListener('lego-goal', this.onLegoGoalToggle.bind(this));
+    },
+
+    onLegoGoalToggle: function() {
+      var el = document.createElement('a-box');
+      el.setAttribute('remove-in-seconds', 3);
+  
+      var tip = document.querySelector('#leftHandController');
+      el.setAttribute('position', this.getInitialBulletPosition(tip));
+      this.el.sceneEl.appendChild(el);
+    },
+
+    getInitialBulletPosition: function(spawnerEl) {
+      var worldPos = new THREE.Vector3();
+      worldPos.setFromMatrixPosition(spawnerEl.object3D.matrixWorld);
+      return worldPos;
+    },
+
+    update: function (oldData) {   
+      
+    }
+
+  });
+
+
 
   

@@ -71,6 +71,11 @@
           </a-entity>
         </template>
 
+        <!-- Lego model -->
+        <template id="lego-template">
+          <a-sphere class="bullet" scale="0.1 0.1 0.1" color="#fff"></a-sphere>
+        </template>
+
       <!-- /Templates -->
     </a-assets> 
 
@@ -92,8 +97,8 @@
       <a-entity id="leftHandController" oculus-touch-controls="hand: left" vive-controls="hand: left" debug-controls="menuID: menuActions" gun="bulletTemplate:#bullet-template" networked="template:#hand-template;attachTemplateToLocal:false;">
         <a-entity  select-bar="controllerID: leftHandController" id="menuActions" scale="0.7 0.7 0.7" position="0 .1 0" rotation="-85 0 0">
           <optgroup label="Actions" value="actions">
-            <option value="teleport" src="./assets/gfx/icon_teleport.png" selected>Teleport</option>
-            <option value="save" src="./assets/gfx/icon_save.png">Save</option>
+            <option value="goal" src="./assets/gfx/icon_goal.png" selected>Goal</option>
+            <option value="pieces" src="./assets/gfx/icon_pieces.png">Pieces</option>
             <option value="saveAs" src="./assets/gfx/icon_saveAs.png">Save As Copy</option>
             <option value="new" src="./assets/gfx/icon_new.png">New</option>
             <option value="erase" src="./assets/gfx/icon_erase.png">Erase</option>
@@ -107,6 +112,8 @@
 
     
     <a-entity class="syncManager" sync-paint></a-entity>
+
+    <a-entity class="lego" toggle-lego-model></a-entity>
 
     <a-entity networked="template:#video-template;attachTemplateToLocal:false;" spawn-in-circle="radius:3"></a-entity>
 
