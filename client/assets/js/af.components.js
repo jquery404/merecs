@@ -1545,3 +1545,27 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
   });
   
 
+  // questionarries
+  AFRAME.registerComponent('questions', {
+    schema: {
+        question: {
+          parse: JSON.parse, stringify: JSON.stringify
+        },
+    },
+
+    init: function () {
+      var self = this;
+      this.eventHandlerFn = function () { console.log(data.stringify); };
+    },
+
+    update: function (oldData) {
+      var data = this.data;
+      var el = this.el;
+
+      el.setAttribute('value',  data.question.qus);
+      
+    }
+
+  });
+
+  

@@ -12,6 +12,7 @@
     <script src="easyrtc/easyrtc.js"></script>
     <script src="https://unpkg.com/networked-aframe/dist/networked-aframe.min.js"></script>
     <script src="https://unpkg.com/aframe-randomizer-components@^3.0.1/dist/aframe-randomizer-components.min.js"></script>
+    <script src="assets/js/aframe-ui-widgets.js"></script>
     <script src="assets/js/TubePainter.js"></script>
     <script src="assets/js/af.components.js"></script>
 
@@ -82,7 +83,7 @@
         camera 
         position="0 1.6 0" 
         look-controls>
-        <a-entity body networked="template:#body-template;showLocalTemplate:false;"></a-entity>
+        <a-entity id="playerBody" body networked="template:#body-template;showLocalTemplate:false;"></a-entity>
         <a-box class="head" visible="false"></a-box>
         <a-entity class="nametag" visible="false"></a-entity>
       </a-entity>
@@ -108,6 +109,19 @@
     <a-entity class="syncManager" sync-paint></a-entity>
 
     <a-entity networked="template:#video-template;attachTemplateToLocal:false;" spawn-in-circle="radius:3"></a-entity>
+
+    <!-- question -->
+    <a-entity questions color="white" position="0 5 -10">
+      <a-box id="progressbar" color="red" scale="1 .5 1" position="0 0 .1"></a-box>
+      <a-text id="quiz"  value="loading..." scale="2 2 1" position="-2 4.5 -10"></a-text>
+    </a-entity>
+    
+
+    <!-- answer panel -->
+    <a-entity id="btnSlider" ui-slider rotation="90 0 0" position="0 1 -0.5">
+        <a-text id="lblSlider" wrap-count="10" value="1" align="center" scale=".25 .25 .25" position="0 -3 .1" rotation="-90 -90 90"></a-text>
+    </a-entity>
+    <a-entity id="btnSubmit" ui-button rotation="90 0 0" position="0 0.7 -0.5" scale=".5 .5 .5"></a-entity>
 
     <a-entity grid="src: #grid; env-map: #sky"></a-entity>
     <a-sky set-sky="#sky" rotation="0 -90 0"></a-sky>

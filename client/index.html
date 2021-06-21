@@ -4,22 +4,64 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MERE</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <title>MERECS</title>
 </head>
-<body>
-    <div class="login-page" style="text-align: center;">
+<body class="text-center">
+  <div class="cover-container d-flex h-100 p-3 mx-auto flex-column">
+    <header class="masthead mb-auto">
+      <div class="inner">
+        <nav class="nav justify-content-center">
+          <a class="nav-link active time" href="#"></a>
+        </nav>
+      </div>
+    </header>
+
+    <main role="main" class="cover">
+      <a class="navbar-brand" href="#page-top"><img src="assets/gfx/mere_logo.svg" width="100px"></a>
+      <div class="login-page inner p-5" style="text-align: center;">
         <div class="form">
-          <h2>Enter room details</h2>
+          <h2>Room details</h2>
           <form class="login-form" action="/scene.html" method="GET">
-            <input type="text" name="room" placeholder="room" required/>
-            <input type="text" name="username" placeholder="username" required/>
+            <div class="row">
+              <div class="col">
+                <input type="text" name="room" class="form-control" placeholder="room" required>
+              </div>
+              <div class="col">
+                <input type="text" name="username" class="form-control" placeholder="username" required>
+              </div>
+            </div>
             <div>
               <input type="checkbox" id="webrtc" name="webrtc"> <label for="webrtc">webrtc</label>
               <input type="checkbox" id="host" name="host"> <label for="host">host</label>
             </div>
-            <button>Join room</button>
+            <button class="btn btn-red">Join room</button>
           </form>
         </div>
-    </div>
+      </div>
+    </main>
+
+    <footer class="mastfoot mt-auto">
+      <div class="inner">
+        MERECS, by <a href="https://jquery404.github.io">@faisal</a>
+      </div>
+    </footer>
+  </div>
+
+
+  <script>
+    var currentdate = new Date(); 
+    var datetime = "Last Meeting: " + currentdate.getDate() + "/"
+                    + (currentdate.getMonth()+1)  + "/" 
+                    + currentdate.getFullYear() + " @ "  
+                    + currentdate.getHours() + ":"  
+                    + currentdate.getMinutes() + ":" 
+                    + currentdate.getSeconds();
+    document.querySelector(".time").innerHTML = datetime;
+  </script>
+
+
+    
 </body>
 </html>

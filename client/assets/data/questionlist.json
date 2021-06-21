@@ -1,0 +1,227 @@
+[
+    {
+        "qus":"In the computer generated world I had a sense of \"being there.\"",
+        "cat":"spatial presence",
+        "scl":["not at all", "very little", "little", "somewhat", "moderately", "very", "very much"]
+    },
+    {
+        "qus":"Somehow I felt that the virtual world surrounded me.",
+        "cat":"spatial presence",
+        "scl":["fully disagree", "disagree", "somewhat disagree", "neither agree nor disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus":"I felt like I was just perceiving pictures.",
+        "cat":"spatial presence",
+        "scl":["fully disagree", "disagree", "somewhat disagree", "neither agree nor disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus":"I did not feel present in the virtual space.",
+        "cat":"spatial presence",
+        "scl":["fully disagree", "disagree", "somewhat disagree", "neither agree nor disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus":"I felt present in the virtual space.",
+        "cat":"spatial presence",
+        "scl":["fully disagree", "disagree", "somewhat disagree", "neither agree nor disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus":"I had a sense of acting in the virtual space, rather than operating something from outside.",
+        "cat":"spatial presence",
+        "scl":["fully disagree", "disagree", "somewhat disagree", "neither agree nor disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus":"How aware were you of the real world surrounding you while navigating in the virtual world? (i.e. sounds, room temperature, other people, etc.)?",
+        "cat":"spatial presence",
+        "scl":["not aware at all", "low awareness", "slightly aware", "neither aware or not aware", "moderately aware", "aware", "fully aware"]
+    },
+    {
+        "qus":"I still paid attention to the real environment.",
+        "cat":"spatial presence",
+        "scl":["fully disagree", "disagree", "somewhat disagree", "neither agree nor disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus":"How real did the virtual world seem to you?",
+        "cat":"spatial presence",
+        "scl":[
+            "about as real as an imagined world",
+            "indistinguishable from the real world"
+        ]
+    },
+    {
+        "qus":"How much did your experience in the virtual environment seem consistent with your real world experience?",
+        "cat":"spatial presence",
+        "scl":[
+            "not consistent", "inconsistent", "somewhat inconsistent", "neither consistent nor inconsistent", 
+            "somewhat consistent", "consistent", "very consistent"
+        ]
+    },
+
+    {
+        "qus": "The other individual paid close attention to me",
+        "cat": "social presence",
+        "scl": ["fully disagree", "disagree", "somewhat disagree", "neither agree or disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus": "I paid close attention to the other individual.",
+        "cat": "social presence",
+        "scl": ["fully disagree", "disagree", "somewhat disagree", "neither agree or disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus": "I was easily distracted when other things were going on around me.",
+        "cat": "social presence",
+        "scl": ["fully disagree", "disagree", "somewhat disagree", "neither agree or disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus": "My opinions were clear to the others. ",
+        "cat": "social presence",
+        "scl": ["fully disagree", "disagree", "somewhat disagree", "neither agree or disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus": "The opinions of the others were clear to me. ",
+        "cat": "social presence",
+        "scl": ["fully disagree", "disagree", "somewhat disagree", "neither agree or disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus": "The other understood what I meant. ",
+        "cat": "social presence",
+        "scl": ["fully disagree", "disagree", "somewhat disagree", "neither agree or disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus": "I understood what the other meant.",
+        "cat": "social presence",
+        "scl": ["fully disagree", "disagree", "somewhat disagree", "neither agree or disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus": "My actions were dependent on the other’s actions.",
+        "cat": "social presence",
+        "scl": ["fully disagree", "disagree", "somewhat disagree", "neither agree or disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus": "The other’s actions were dependent on my actions.",
+        "cat": "social presence",
+        "scl": ["fully disagree", "disagree", "somewhat disagree", "neither agree or disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus": "My partner worked with me to complete the task.",
+        "cat": "social presence",
+        "scl": ["fully disagree", "disagree", "somewhat disagree", "neither agree or disagree", "somewhat agree", "agree", "fully agree"]
+    },
+    {
+        "qus": "I worked with the other individual to complete the task.",
+        "cat": "social presence",
+        "scl": ["fully disagree", "disagree", "somewhat disagree", "neither agree or disagree", "somewhat agree", "agree", "fully agree"]
+    },
+
+    {
+        "qus": "I often felt as if I was all alone",
+        "cat": "copresence",
+        "scl": ["not at all", "very much"]
+    },
+    {
+        "qus": "I hardly noticed the other individual.",
+        "cat": "copresence",
+        "scl": ["not at all", "very much"]
+    },
+    {
+        "qus": "I was often aware of others in the environment.",
+        "cat": "copresence",
+        "scl": ["not at all", "very much"]
+    },
+    {
+        "qus": "I felt like there was someone else in the room with me",
+        "cat": "copresence",
+        "scl": ["not at all", "very much"]
+    },
+    {
+        "qus": "I think the other individual often felt alone",
+        "cat": "copresence",
+        "scl": ["not at all", "very much"]
+    },
+    {
+        "qus": "The other person hardly noticed me.",
+        "cat": "copresence",
+        "scl": ["not at all", "very much"]
+    },
+    {
+        "qus": "I felt like the “other” was aware of my presence in the virtual space.",
+        "cat": "copresence",
+        "scl": ["not at all", "very much"]
+    },
+    {
+        "qus": "I was always aware of my partner’s presence",
+        "cat": "copresence",
+        "scl": ["not at all", "very much"]
+    },
+    {
+        "qus": "I was always aware that my partner and I were at different locations.",
+        "cat": "copresence",
+        "scl": ["not at all", "very much"]
+    },
+    {
+        "qus": "It felt as if my partner and I were in the same room.",
+        "cat": "copresence",
+        "scl": ["not at all", "very much"]
+    },
+    {
+        "qus": "It was just like being face to face with my partner ",
+        "cat": "copresence",
+        "scl": ["not at all", "very much"]
+    },
+
+    {
+        "qus": "How mentally demanding was the task?",
+        "cat": "workload",
+        "scl": ["low", "high"]
+    },
+    {
+        "qus": "How physically demanding was the task?",
+        "cat": "workload",
+        "scl": ["low", "high"]
+    },
+    {
+        "qus": "How hurried or rushed was the pace of the task?",
+        "cat": "workload",
+        "scl": ["low", "high"]
+    },
+    {
+        "qus": "How successful were you in accomplishing what you were asked to do?",
+        "cat": "workload",
+        "scl": ["low", "high"]
+    },
+    {
+        "qus": "How hard did you have to work to accomplish your level of performance?",
+        "cat": "workload",
+        "scl": ["low", "high"]
+    },
+    {
+        "qus": "How insecure, discouraged, irritated, stressed, and annoyed were you?",
+        "cat": "workload",
+        "scl": ["low", "high"]
+    },
+    {
+        "qus": "I think that I would like to use this system frequently",
+        "cat": "easiness",
+        "scl": ["low", "high"]
+    },
+    {
+        "qus": "I found the system unnecessarily complex",
+        "cat": "easiness",
+        "scl": ["low", "high"]
+    },
+    {
+        "qus": "I thought the system was easy to use",
+        "cat": "easiness",
+        "scl": ["low", "high"]
+    },
+    {
+        "qus": "I think that I would need the support of a technical person to be able to use this system",
+        "cat": "easiness",
+        "scl": ["low", "high"]
+    },
+    {
+        "qus": "I needed to learn a lot of things before I could get going with this system",
+        "cat": "easiness",
+        "scl": ["low", "high"]
+    }
+
+]
