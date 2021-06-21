@@ -1,18 +1,24 @@
 // call by af
 function onConnect () {
   console.log("onConnect", new Date());
-
-  //startVideo();
+  if (isHosting) startVideo();
 }
 
 function startVideo() {
   if (navigator.mediaDevices.getUserMedia) {
-      navigator.getUserMedia({video: true, audio: true},
+      navigator.getUserMedia({video: true, audio: false},
 
       function (stream) {
-          var video = document.querySelector("#myVideo");
-          video.srcObject = stream;
-          //localStream = stream;
+        const video = document.createElement('video');
+        video.setAttribute('id', 'myVideo');
+        video.setAttribute('autoplay', true);
+        video.setAttribute('playsinline', true);
+        video.setAttribute('muted', true);
+        video.srcObject = stream;
+        document.querySelector('body').appendChild(video); 
+
+        let skybox = document.querySelector("a-sky");
+        skybox.setAttribute('src', '#myVideo');
       },
 
       function (err) {
