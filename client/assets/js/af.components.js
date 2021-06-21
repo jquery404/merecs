@@ -55,8 +55,8 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
 
 
   const usersMap = {};
+  let streamerList = [];
   let isHosting;
-  let videoReceiveList = [];
 
   AFRAME.registerComponent('merecs-room', {
     init: function () {
@@ -531,7 +531,6 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
     addEventListeners: function () {
       if (this.data.controls && this.data.controllerID) {
         var controllerEl = document.getElementById(this.data.controllerID);
-        console.log(this.data)
         controllerEl.addEventListener('trackpaddown', this.onTrackpadDown.bind(this));
         controllerEl.addEventListener('axismove', this.onAxisMove.bind(this));
         controllerEl.addEventListener('triggerdown', this.onTriggerDown.bind(this));
@@ -1331,22 +1330,34 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
     },
   
     dependencies: ['material'],
-  
+    
     init: function () {
       this.videoTexture = null;
       this.video = null;
       this.stream = null;
+      this.current_owner_id = null;
       let that = this;
       this._setMediaStream = this._setMediaStream.bind(this);
       
+      // receiving other participant streams
       NAF.utils.getNetworkedEntity(this.el).then((networkedEl) => {
+        
         const ownerId = networkedEl.components.networked.data.owner;
         const currentOwnerId = usersMap[""].el.components.networked.data.owner;
-        videoReceiveList.push(ownerId);
         
+        /** keeping track of all streaming IDs that receive */
+        this.current_owner_id = ownerId;
+        streamerList.push(this.current_owner_id);
 
-        if ((ownerId && videoReceiveList.length == 1) || (ownerId && isHosting && videoReceiveList.length==2)) {
-          console.log('video coming from ', ownerId, videoReceiveList.length);
+        // check if this stream from a host
+        console.log('video coming from ', ownerId);
+
+        if (ownerId && isHosting) {
+          NAF.connection.adapter.getMediaStream(ownerId, "video")
+            .then(this._setMediaStream)
+            .catch((e) => naf.log.error(`Error getting media stream for ${ownerId}`, e));
+        
+        } else if(ownerId && !isHosting && streamerList[0] == ownerId){
           NAF.connection.adapter.getMediaStream(ownerId, "video")
             .then(this._setMediaStream)
             .catch((e) => naf.log.error(`Error getting media stream for ${ownerId}`, e));
@@ -1393,7 +1404,10 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
     _clearMediaStream() {
   
       this.stream = null;
-  
+
+      streamerList.pop(this.current_owner_id);
+      console.log(streamerList);
+
       if (this.videoTexture) {
   
         if (this.videoTexture.image instanceof HTMLVideoElement) {
