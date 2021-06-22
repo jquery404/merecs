@@ -348,21 +348,10 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
   AFRAME.registerComponent('gun', {
     schema: {
       bulletTemplate: {default: '#bullet-template'},
-      triggerKeyCode: {default: 32} // spacebar
     },
   
     init: function() {
-      var that = this;
       this.el.addEventListener('gun-fire', this.onGunFire.bind(this));
-
-      // this.el.addEventListener('triggerdown', () => {
-      //   that.shoot();
-      // });
-
-      // this.el.addEventListener('triggerup', () => {
-        
-      // });
-      
     },
 
     onGunFire: function() {
@@ -1150,7 +1139,6 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       // get currently selected action
       var optionValue = menuEl.components['select-bar'].selectedOptionValue;
       console.log("debug-controls: new optionValue: " + optionValue);
-  //    console.log(optionValue);
       // do new one
       this.handleActionStart(optionValue);
     },
@@ -1174,11 +1162,6 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       switch (optionValue) {
         case "teleport":
           console.log("debug-controls: teleportStart");
-          // controlEl = this.el;
-          // console.log("controlEl:");
-          // console.log(controlEl);
-          // // Add attribute from this html: teleport-controls="button: trigger; collisionEntities: #ground"
-          // controlEl.setAttribute("teleport-controls", "button: trigger; collisionEntities: #ground");
           return; // without this return the other cases are fired - weird!
         case "save":
           console.log("debug-controls: saveStart");
@@ -1195,13 +1178,8 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
     handleActionEnd: function(optionValue) {
       // for given optionValue, do something
       switch (optionValue) {
-        case "teleport":        // add teleport component to the control element that is the parent of this menu
+        case "teleport":
           console.log("debug-controls: teleportEnd");
-          // controlEl = this.el;
-          // console.log("controlEl:");
-          // console.log(controlEl);
-          // // Add attribute from this html: teleport-controls="button: trigger; collisionEntities: #ground"
-          // controlEl.removeAttribute("teleport-controls");
           return; // without this return the other cases are fired - weird!
         case "save":
           console.log("debug-controls: saveStartEnd");
@@ -1571,27 +1549,27 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
   });
 
 
-  // questionarries
-  AFRAME.registerComponent('toggle-lego-model', {
+  // Toast for the lego model that you will be building
+  AFRAME.registerComponent('lego-model', {
     schema: {
-      bulletTemplate: {default: '#bullet-template'},      
+      legoTemplate: {default: '#lego-template'},      
     },
 
     init: function () {
-      var self = this;
       this.el.addEventListener('lego-goal', this.onLegoGoalToggle.bind(this));
     },
 
     onLegoGoalToggle: function() {
+      console.log("loooooop");
       var el = document.createElement('a-box');
       el.setAttribute('remove-in-seconds', 3);
   
       var tip = document.querySelector('#leftHandController');
-      el.setAttribute('position', this.getInitialBulletPosition(tip));
+      el.setAttribute('position', this.getSpawnPosition(tip));
       this.el.sceneEl.appendChild(el);
     },
 
-    getInitialBulletPosition: function(spawnerEl) {
+    getSpawnPosition: function(spawnerEl) {
       var worldPos = new THREE.Vector3();
       worldPos.setFromMatrixPosition(spawnerEl.object3D.matrixWorld);
       return worldPos;
