@@ -1552,7 +1552,8 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
   // Toast for the lego model that you will be building
   AFRAME.registerComponent('lego-model', {
     schema: {
-      legoTemplate: {default: '#lego-template'},      
+      legoTemplate: {default: '#lego-template'},
+      isShowing: {default: false},
     },
 
     init: function () {
@@ -1560,19 +1561,23 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
     },
 
     onLegoGoalToggle: function() {
-      console.log("loooooop");
-      var el = document.createElement('a-box');
-      el.setAttribute('remove-in-seconds', 3);
-  
-      var tip = document.querySelector('#leftHandController');
-      el.setAttribute('position', this.getSpawnPosition(tip));
-      this.el.sceneEl.appendChild(el);
+      console.log(this.data.isShowing);
+
+      if(!this.data.isShowing){
+        var el = document.createElement('a-box');
+        el.setAttribute('scale', '.1 .1 .1');
+        el.setAttribute('position', '0 .2 0');
+        setTimeout(this.toggleShowing.bind(this), 3 * 1000);
+        el.setAttribute('remove-in-seconds', 3);
+        this.data.isShowing = true;
+        this.el.appendChild(el);
+      }
+      
     },
 
-    getSpawnPosition: function(spawnerEl) {
-      var worldPos = new THREE.Vector3();
-      worldPos.setFromMatrixPosition(spawnerEl.object3D.matrixWorld);
-      return worldPos;
+    toggleShowing: function(){
+      var el = this.el;
+      this.data.isShowing = false;
     },
 
     update: function (oldData) {   
