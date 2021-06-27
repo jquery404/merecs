@@ -1109,7 +1109,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       // get currently selected action
       var optionValue = menuEl.components['select-bar'].selectedOptionValue;
       console.log("debug-controls: optionValue:" + optionValue);
-  //    console.log(optionValue);
+      // console.log(optionValue);
   
       // do the thing associated with the action
       this.handleActionStart(optionValue);
@@ -1339,7 +1339,8 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
           //   .then(this._setMediaStream)
           //   .catch((e) => naf.log.error(`Error getting media stream for ${ownerId}`, e));
         
-        } else if(ownerId && !isHosting && streamerList[0] == ownerId){
+        //} else if(ownerId && !isHosting && streamerList[0] == ownerId){
+        } else if(ownerId && !isHosting){
           NAF.connection.adapter.getMediaStream(ownerId, "video")
             .then(this._setMediaStream)
             .catch((e) => naf.log.error(`Error getting media stream for ${ownerId}`, e));
@@ -1377,6 +1378,10 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
           const mesh = this.el.getObject3D('mesh');
           mesh.material.map = this.videoTexture;
           mesh.material.needsUpdate = true;
+
+          //  set skybox
+          let skybox = document.querySelector("a-sky");
+          skybox.getObject3D('mesh').material.map =  this.videoTexture;
         }
   
         this.stream = newStream;
