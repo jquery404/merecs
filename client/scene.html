@@ -82,9 +82,7 @@
     </a-assets> 
 
     <a-entity id="player"
-      networked="template:#player-template;attachTemplateToLocal:false;"
-      spawn-in-circle="radius:3"
-      wasd-controls>
+      networked="template:#player-template;attachTemplateToLocal:false;">
       <a-entity id="playerHead"
         networked="template:#avatar-template;attachTemplateToLocal:false;"
         camera 
@@ -122,18 +120,16 @@
     <a-entity networked="template:#video-template;attachTemplateToLocal:false;" spawn-in-circle="radius:3"></a-entity>
 
     <!-- question -->
-    <a-entity questions color="white" position="0 5 -10">
-      <a-box id="progressbar" color="red" scale="1 .5 1" position="0 0 .1"></a-box>
-      <a-text id="quiz"  value="loading..." scale="2 2 1" position="-2 4.5 -10"></a-text>
+    <a-entity questions color="white" position="0 0 -5" geometry="primitive: plane; width: 4; height: 3" material="color: #333333; shader: flat; transparent: false">
+      <a-box id="progressbar" color="red" scale="4 .1 .1" position="0 1.4 0"></a-box>
+      <a-text id="quiz"  value="loading..." align="center" width="4" scale="1 1 1" position="0 1 0"></a-text>
+
+      <!-- answer panel -->
+      <a-text id="lblSlider" wrap-count="10" value="1" align="center"></a-text>
+      <a-entity id="btnSubmit" ui-button rotation="90 0 0" position="0.5 0 0" scale="1 1 1"></a-entity>
     </a-entity>
     
-
-    <!-- answer panel -->
-    <a-entity id="btnSlider" ui-slider rotation="90 0 0" position="0 1 -0.5">
-        <a-text id="lblSlider" wrap-count="10" value="1" align="center" scale=".25 .25 .25" position="0 -3 .1" rotation="-90 -90 90"></a-text>
-    </a-entity>
-    <a-entity id="btnSubmit" ui-button rotation="90 0 0" position="0 0.7 -0.5" scale=".5 .5 .5"></a-entity>
-
+    <a-entity id="btnSlider" ui-slider rotation="90 0 0" position="0 0 0"></a-entity>
     <a-entity grid="src: #grid; env-map: #sky"></a-entity>
     <a-sky set-sky="#sky" rotation="0 -90 0"></a-sky>
 

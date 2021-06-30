@@ -57,6 +57,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
   const usersMap = {};
   let streamerList = [];
   let isHosting;
+  let questionList;
 
   AFRAME.registerComponent('merecs-room', {
     init: function () {
@@ -1533,21 +1534,34 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
   // questionarries
   AFRAME.registerComponent('questions', {
     schema: {
-        question: {
-          parse: JSON.parse, stringify: JSON.stringify
-        },
+      quizID: {type: 'string', default: 'quiz'},
+      progressbarID: {type: 'string', default: 'progressbar'}
     },
 
     init: function () {
       var self = this;
-      this.eventHandlerFn = function () { console.log(data.stringify); };
+      this.qIndex = 0;
+
+      this.quizEl = document.getElementById(this.data.quizID);
+      this.progressbarEl = document.getElementById(this.data.progressbarID);
+      setTimeout(this.toggleShowing.bind(this), 3 * 1000);
+    },
+
+    toggleShowing: function(){
+      this.qIndex+=1; 
+      let proBarWidth = (this.qIndex/questionList.length);
+      let proBarPosition = (1- proBarWidth) /2;
+      this.progressbarEl.setAttribute('position', -1*proBarPosition+' 1.4 0');
+      this.progressbarEl.setAttribute('scale', proBarWidth + ' .1 .1');
+      // lblSlider.setAttribute('value', 0);
+
+      this.quizEl.setAttribute('value', questionList[this.qIndex].qus);
     },
 
     update: function (oldData) {
       var data = this.data;
       var el = this.el;
 
-      el.setAttribute('value',  data.question.qus);
       
     }
 
