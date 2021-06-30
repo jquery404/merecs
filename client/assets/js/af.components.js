@@ -1562,6 +1562,12 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       var data = this.data;
       var el = this.el;
 
+      // btnSlider.addEventListener('change', function (e) {
+      //   let sliderVal = Math.floor(e.detail.value*7);
+      //   sliderVal = sliderVal < 0 ? 0 : sliderVal
+      //   lblSlider.setAttribute('value', questionList[qIndex].scl[sliderVal]);
+      // });
+
       
     }
 
