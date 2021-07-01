@@ -6,7 +6,7 @@
 - [x] Name tag update across all the users
 - [x] Special name tag for the (HOST)
 - [ ] VR LEGO obj
-- [x] UI to import VR LEGOs; https://github.com/kfarr/aframe-select-bar-component
+- [x] UI to import VR LEGOs; 
 - [x] UI to show actual constructed LEGO models
 - [x] Adjust avatar body and head rotation issues
 - [ ] Presence questionarries for all users
