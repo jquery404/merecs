@@ -1535,7 +1535,8 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
   AFRAME.registerComponent('questions', {
     schema: {
       quizID: {type: 'string', default: 'quiz'},
-      progressbarID: {type: 'string', default: 'progressbar'}
+      progressbarID: {type: 'string', default: 'progressbar'},
+      answerLblID: {type: 'string', default: 'answerLbl'},
     },
 
     init: function () {
@@ -1544,6 +1545,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
 
       this.quizEl = document.getElementById(this.data.quizID);
       this.progressbarEl = document.getElementById(this.data.progressbarID);
+      this.answerLabelEl = document.getElementById(this.data.answerLblID)
       setTimeout(this.toggleShowing.bind(this), 3 * 1000);
     },
 
@@ -1551,11 +1553,12 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       this.qIndex+=1; 
       let proBarWidth = (this.qIndex/questionList.length);
       let proBarPosition = (1- proBarWidth) /2;
+      
       this.progressbarEl.setAttribute('position', -1*proBarPosition+' 1.4 0');
       this.progressbarEl.setAttribute('scale', proBarWidth + ' .1 .1');
-      // lblSlider.setAttribute('value', 0);
-
+      
       this.quizEl.setAttribute('value', questionList[this.qIndex].qus);
+      this.answerLabelEl.setAttribute('value', '...');
     },
 
     update: function (oldData) {
@@ -1609,6 +1612,14 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       
     }
 
+  });
+
+
+
+  AFRAME.registerSystem('intersect-change', {
+    init: function () {
+
+    }
   });
 
 

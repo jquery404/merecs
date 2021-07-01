@@ -1,4 +1,3 @@
-// required modules
 const http = require("http");          
 const express = require("express"); 
 const serveStatic = require("serve-static");
@@ -8,14 +7,10 @@ const port = process.env.PORT || 8080;
 
 process.title = "node-easyrtc";
 
-
 var app = express();
 app.use(express.static('client'));
 
-// Start Express http server
 var server = http.createServer(app);
-
-// Start Socket.io so it attaches itself to Express server
 var socketServer = socketIo.listen(server, {"log level": 1});
 
 var myIceServers = [
@@ -71,7 +66,6 @@ var rtc = easyrtc.listen(app, socketServer, null, function(err, rtcRef) {
     });
 });
 
-//listen on port
 server.listen(port, () => {
     console.log('listening everything on ' + port);
 });

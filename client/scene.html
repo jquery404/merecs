@@ -30,6 +30,12 @@
         <a-asset-item id="boy-body-glb" src="/assets/model/curious_boy_body_5.glb"></a-asset-item>
         <a-asset-item id="hand-glb" src="/assets/model/hand.glb"></a-asset-item>
         <a-asset-item id="env_arrow" src="/assets/model/env_arrow.obj"></a-asset-item>
+        <a-mixin id="beveled-square" geometry="primitive: cone; radiusTop: 0.15; radiusBottom: 0.19; height: 0.02; segmentsRadial: 4; segmentsHeight: 1" rotation="0 45 0"></a-mixin>
+        <a-mixin id="square" geometry="primitive: box; width: 0.18; height: 0.025; depth: 0.18;" position="0 0.02 0"></a-mixin>
+        <a-mixin id="blue" material="color: #1E2768;"></a-mixin>
+        <a-mixin id="darkblue" material="color: #1E2798;"></a-mixin>
+        <a-mixin id="white" material="color: #FFF88E;"></a-mixin>
+        <a-mixin id="offset" position="0 0.01 0"></a-mixin>
 
         <!-- Player -->
         <template id="player-template">
@@ -93,7 +99,7 @@
         <a-entity class="nametag" visible="false"></a-entity>
       </a-entity>
 
-      <!-- <a-entity id="leftHandController" hand-controls="hand:left" debug-controls="menuID: menuActions" gun="bulletTemplate:#bullet-template" networked="template:#hand-template;"> -->
+      <!-- hand-controls="hand:right" <a-entity id="leftHandController" hand-controls="hand:left" debug-controls="menuID: menuActions" gun="bulletTemplate:#bullet-template" networked="template:#hand-template;"> -->
       <a-entity id="leftHandController" oculus-touch-controls="hand: left" vive-controls="hand: left" debug-controls="menuID: menuActions" lego-model="legoTemplate:#lego-template" gun="bulletTemplate:#bullet-template" networked="template:#hand-template;attachTemplateToLocal:false;">
         <a-entity  select-bar="controllerID: leftHandController" id="menuActions" scale="0.7 0.7 0.7" position="0 .1 0" rotation="-85 0 0">
           <optgroup label="Actions" value="actions">
@@ -107,7 +113,7 @@
           </optgroup>
         </a-entity>
       </a-entity>
-      <a-entity id="rightHandController" hand-controls="hand:right" laser-controls="hand: right" painter networked="template:#hand-template;attachTemplateToLocal:false;"></a-entity>
+      <a-entity id="rightHandController" laser-controls="hand: right" painter networked="template:#hand-template;attachTemplateToLocal:false;"></a-entity>
     </a-entity>
 
     
@@ -123,14 +129,14 @@
     <a-entity questions color="white" position="0 0 -5" geometry="primitive: plane; width: 4; height: 3" material="color: #333333; shader: flat; transparent: false">
       <a-box id="progressbar" color="red" scale="4 .1 .1" position="0 1.4 0"></a-box>
       <a-text id="quiz"  value="loading..." align="center" width="4" scale="1 1 1" position="0 1 0"></a-text>
-
-      <!-- answer panel -->
-      <a-text id="lblSlider" wrap-count="10" value="1" align="center"></a-text>
+      <a-text id="answerLbl" wrap-count="10" value="1" align="center"></a-text>
+      
+      <a-entity id="buttonCustom" ui-button="value: 0; base: beveled-square, darkblue; top: square, white; pressed: blue, offset" position="0 -1 0" rotation="90 0 0"></a-entity>
       <a-entity id="btnSubmit" ui-button rotation="90 0 0" position="0.5 0 0" scale="1 1 1"></a-entity>
     </a-entity>
     
     <a-entity id="btnSlider" ui-slider rotation="90 0 0" position="0 0 0"></a-entity>
-    <a-entity grid="src: #grid; env-map: #sky"></a-entity>
+    <a-entity grid="src: #grid; env-map: #sky" intersect-change></a-entity>
     <a-sky set-sky="#sky" rotation="0 -90 0"></a-sky>
 
     <a-entity light="color: #ccccff; intensity: 1; type: ambient;" visible=""></a-entity>

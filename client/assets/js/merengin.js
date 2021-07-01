@@ -1,7 +1,7 @@
 // call by af
 function onConnect () {
   console.log("onConnect", new Date());
-  // if (isHosting) startVideo();
+  if (isHosting) startVideo();
 
   fetch('./assets/data/questionlist.json')
     .then(res => { return res.json() })
