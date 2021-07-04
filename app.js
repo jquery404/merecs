@@ -14,10 +14,18 @@ var server = http.createServer(app);
 var socketServer = socketIo.listen(server, {"log level": 1});
 
 var myIceServers = [
-  {"url":"stun:stun.l.google.com:19302"},
-  {"url":"stun:stun1.l.google.com:19302"},
-  {"url":"stun:stun2.l.google.com:19302"},
-  {"url":"stun:stun3.l.google.com:19302"}
+    {"url":"stun:stun.l.google.com:19302"},
+    {"url":"stun:stun1.l.google.com:19302"},
+    {"url":"stun:stun2.l.google.com:19302"},
+    {"url":"stun:stun3.l.google.com:19302"},
+    {
+        "url": 'turn:192.158.29.39:3478?transport=udp',
+        "credential": 'JZEOEt2V3Qb0y27GRntt2u2PAYA=',
+        "username": '28224511:1379330808'
+        // url: 'turn:numb.viagenie.ca',
+        // credential: 'zx1234',
+        // username: 'jquery404@gmail.com'
+    }
   // {
   //   "url":"turn:[ADDRESS]:[PORT]",
   //   "username":"[USERNAME]",
