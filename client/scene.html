@@ -30,12 +30,6 @@
         <a-asset-item id="boy-body-glb" src="/assets/model/curious_boy_body_5.glb"></a-asset-item>
         <a-asset-item id="hand-glb" src="/assets/model/hand.glb"></a-asset-item>
         <a-asset-item id="env_arrow" src="/assets/model/env_arrow.obj"></a-asset-item>
-        <a-mixin id="beveled-square" geometry="primitive: cone; radiusTop: 0.15; radiusBottom: 0.19; height: 0.02; segmentsRadial: 4; segmentsHeight: 1" rotation="0 45 0"></a-mixin>
-        <a-mixin id="square" geometry="primitive: box; width: 0.18; height: 0.025; depth: 0.18;" position="0 0.02 0"></a-mixin>
-        <a-mixin id="blue" material="color: #1E2768;"></a-mixin>
-        <a-mixin id="darkblue" material="color: #1E2798;"></a-mixin>
-        <a-mixin id="white" material="color: #FFF88E;"></a-mixin>
-        <a-mixin id="offset" position="0 0.01 0"></a-mixin>
 
         <!-- Player -->
         <template id="player-template">
@@ -108,7 +102,7 @@
             <option value="saveAs" src="./assets/gfx/icon_saveAs.png">Save As Copy</option>
             <option value="new" src="./assets/gfx/icon_new.png">New</option>
             <option value="erase" src="./assets/gfx/icon_erase.png">Erase</option>
-            <option value="inspect" src="./assets/gfx/icon_inspect.png">Inspect</option>
+            <option value="paint" src="./assets/gfx/icon_paint.png">Paint</option>
             <option value="shooter" src="./assets/gfx/gun_shot.png">Shooter</option>
           </optgroup>
         </a-entity>
@@ -131,11 +125,11 @@
       <a-text id="quiz"  value="loading..." align="center" width="4" scale="1 1 1" position="0 1 0"></a-text>
       <a-text id="answerLbl" wrap-count="10" value="1" align="center"></a-text>
       
-      <a-entity id="buttonCustom" ui-button="value: 0; base: beveled-square, darkblue; top: square, white; pressed: blue, offset" position="0 -1 0" rotation="90 0 0"></a-entity>
-      <a-entity id="btnSubmit" ui-button rotation="90 0 0" position="0.5 0 0" scale="1 1 1"></a-entity>
+      <a-entity id="btnPrev" ui-button rotation="90 0 0" position="-2 0 0"></a-entity>
+      <a-entity id="btnNext" ui-button rotation="90 0 0" position="2 0 0"></a-entity>
     </a-entity>
     
-    <a-entity id="btnSlider" ui-slider rotation="90 0 0" position="0 0 0"></a-entity>
+    <a-entity id="btnSlider" ui-slider rotation="0 0 0" position="0 0 -0.5"></a-entity>
     <a-entity grid="src: #grid; env-map: #sky" intersect-change></a-entity>
     <a-sky set-sky="#sky" rotation="0 -90 0"></a-sky>
 

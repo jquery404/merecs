@@ -58,6 +58,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
   let streamerList = [];
   let isHosting;
   let questionList;
+  let togglePaint;
 
   AFRAME.registerComponent('merecs-room', {
     init: function () {
@@ -222,6 +223,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
     },
   
     init: function () {
+      this.el.addEventListener('toggle-paint', function(){console.log("asd")});
       
       let first = true;
       this.userData = {};
@@ -1123,7 +1125,7 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       var optionValue = menuEl.components['select-bar'].selectedOptionValue;
       console.log(optionValue);
       switch(optionValue){
-        case 'annotation': break; 
+        case 'paint': this.el.emit("toggle-paint"); break;
         case 'pieces': this.el.emit("lego-pieces"); break;
         case 'goal': this.el.emit("lego-goal"); break;
         case 'shooter': this.el.emit("gun-fire"); break;
@@ -1537,6 +1539,8 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       quizID: {type: 'string', default: 'quiz'},
       progressbarID: {type: 'string', default: 'progressbar'},
       answerLblID: {type: 'string', default: 'answerLbl'},
+      btnPrevID: {type: 'string', default: 'btnPrev'},
+      btnNextID: {type: 'string', default: 'btnNext'},
     },
 
     init: function () {
@@ -1545,12 +1549,17 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
 
       this.quizEl = document.getElementById(this.data.quizID);
       this.progressbarEl = document.getElementById(this.data.progressbarID);
-      this.answerLabelEl = document.getElementById(this.data.answerLblID)
-      setTimeout(this.toggleShowing.bind(this), 3 * 1000);
+      this.answerLabelEl = document.getElementById(this.data.answerLblID);
+      this.btnPrevEl = document.getElementById(this.data.btnPrevID);
+      this.btnNextEl = document.getElementById(this.data.btnNextID);
+
+      this.btnPrevEl.addEventListener('pressed', self.onClickPrev.bind(this));
+      this.btnNextEl.addEventListener('pressed', self.onClickNext.bind(this));
+
+      setTimeout(this.showNewQuestion.bind(this), 3 * 1000);
     },
 
-    toggleShowing: function(){
-      this.qIndex+=1; 
+    showNewQuestion: function(){
       let proBarWidth = (this.qIndex/questionList.length);
       let proBarPosition = (1- proBarWidth) /2;
       
@@ -1559,6 +1568,16 @@ assert(loopIndex(-2, testLoopArray.length) == 8);
       
       this.quizEl.setAttribute('value', questionList[this.qIndex].qus);
       this.answerLabelEl.setAttribute('value', '...');
+    },
+
+    onClickPrev: function(){
+      this.qIndex = (this.qIndex == 0) ? 0 : this.qIndex - 1;
+      this.showNewQuestion();
+    },
+
+    onClickNext: function(){
+      this.qIndex = (questionList.length == this.qIndex) ? this.qIndex : this.qIndex + 1;
+      this.showNewQuestion();
     },
 
     update: function (oldData) {
