@@ -61,7 +61,7 @@ NAF.schemas.add({
 NAF.schemas.add({template: '#player-template', components: ['position', 'rotation']});
 NAF.schemas.add({template: '#hand-template', components: ['position', 'rotation']});
 NAF.schemas.add({template: '#body-template', components: ['position', 'rotation', 'visible']});
-NAF.schemas.add({template: '#video-template', components: ['position']});
+
 // On mobile remove elements that are resource heavy
 const isMobile = AFRAME.utils.device.isMobile();
 if (isMobile) {
