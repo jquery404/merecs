@@ -65,13 +65,6 @@
           </a-entity>
         </template>
 
-        <!-- Video -->
-        <template id="video-template">
-          <a-entity class="video">
-            <a-videosphere position="5 1.5 5" radius=".7" merecs-stream-src videosphereexpand></a-videosphere>
-          </a-entity>
-        </template>
-
         <!-- Lego model -->
         <template id="lego-template">
           <a-entity>
@@ -118,8 +111,6 @@
     <a-entity class="dummy">
       <a-entity template="src: #lego-template" position="0 0 0"></a-entity>
     </a-entity>
-
-    <a-entity networked="template:#video-template;attachTemplateToLocal:false;" spawn-in-circle="radius:3"></a-entity>
 
     <!-- question -->
     <a-entity questions color="white" position="0 0 -5" geometry="primitive: plane; width: 4; height: 3" material="color: #333333; shader: flat; transparent: false">
